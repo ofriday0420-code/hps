@@ -1,3 +1,5 @@
 node_modules/
 .env
 data/*.tmp
+data/designs.json
+data/addresses.json
