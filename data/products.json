@@ -1,0 +1,47 @@
+[
+  {
+    "id": "t-shirt",
+    "name": "T-Shirt",
+    "basePrice": 350,
+    "category": "apparel",
+    "sizes": ["S", "M", "L", "XL", "XXL", "3XL"],
+    "colors": ["Black", "White", "Red", "Blue", "Green", "Yellow"],
+    "printSides": ["front", "back"]
+  },
+  {
+    "id": "hoodie",
+    "name": "Hoodie",
+    "basePrice": 750,
+    "category": "apparel",
+    "sizes": ["S", "M", "L", "XL", "XXL", "3XL"],
+    "colors": ["Black", "White", "Red", "Blue"],
+    "printSides": ["front", "back"]
+  },
+  {
+    "id": "denim",
+    "name": "Denim",
+    "basePrice": 1200,
+    "category": "apparel",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": ["Black", "Blue"],
+    "printSides": ["front"]
+  },
+  {
+    "id": "bag",
+    "name": "Bag",
+    "basePrice": 300,
+    "category": "accessories",
+    "sizes": ["One size"],
+    "colors": ["Black", "White", "Red"],
+    "printSides": ["front"]
+  },
+  {
+    "id": "cap",
+    "name": "Cap",
+    "basePrice": 250,
+    "category": "accessories",
+    "sizes": ["One size"],
+    "colors": ["Black", "White", "Red", "Blue"],
+    "printSides": ["front"]
+  }
+]
