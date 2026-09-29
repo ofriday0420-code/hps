@@ -36,7 +36,7 @@ button{font:inherit;cursor:pointer}
 .hero{padding:82px 0 64px;display:grid;gap:42px;grid-template-columns:1.08fr .92fr;align-items:center}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;color:var(--acc-dark);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.eyebrow:before{content:"";width:24px;height:2px;background:var(--acc)}
 .hero h1{font-size:clamp(40px,5vw,70px);line-height:1.01;margin:0 0 18px;letter-spacing:-3px;max-width:650px}.hero h1 em{color:var(--acc);font-style:normal}
-.hero p{color:var(--mut);max-width:50ch}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.hero-visual{position:relative;min-height:360px;background:var(--ink);border-radius:var(--radius-lg);display:grid;place-items:center;overflow:hidden;box-shadow:var(--shadow)}.hero-visual:before,.hero-visual:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.12);border-radius:50%}.hero-visual:before{width:340px;height:340px}.hero-visual:after{width:220px;height:220px}.hero-product{position:relative;z-index:1;font-size:150px;filter:drop-shadow(0 20px 14px rgba(0,0,0,.25));transform:rotate(-7deg)}.hero-note{position:absolute;z-index:2;right:22px;bottom:22px;background:#fff;color:var(--ink);border-radius:12px;padding:10px 13px;font-size:12px;font-weight:700;box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.hero p{color:var(--mut);max-width:50ch}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.hero-visual{position:relative;min-height:360px;background:var(--ink);border-radius:var(--radius-lg);display:grid;place-items:center;overflow:hidden;box-shadow:var(--shadow)}.hero-visual:before,.hero-visual:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.12);border-radius:50%}.hero-visual:before{width:340px;height:340px}.hero-visual:after{width:220px;height:220px}.hero-product{position:relative;z-index:1;width:210px;height:255px;filter:drop-shadow(0 20px 14px rgba(0,0,0,.25));transform:rotate(-7deg)}.hero-product svg{width:100%;height:100%;border-radius:15px}.hero-note{position:absolute;z-index:2;right:22px;bottom:22px;background:#fff;color:var(--ink);border-radius:12px;padding:10px 13px;font-size:12px;font-weight:700;box-shadow:0 10px 28px rgba(0,0,0,.2)}
 .proof{display:flex;flex-wrap:wrap;gap:24px;padding:18px 0 38px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}.proof strong{display:block;color:var(--ink);font-size:17px}
 /* Section headings and product catalogue/filter/detail presentation. */
 h2{font-size:30px;margin:58px 0 18px;letter-spacing:-1px}section>h2{display:flex;align-items:center;gap:12px}section>h2:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc)}
@@ -44,20 +44,22 @@ h2{font-size:30px;margin:58px 0 18px;letter-spacing:-1px}section>h2{display:flex
 .shop-tools{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:10px;margin:18px 0}.shop-tools input,.shop-tools select{min-height:42px}
 .shop-summary{display:flex;justify-content:space-between;align-items:center;margin:12px 0;color:var(--mut);font-size:13px}.shop-summary strong{color:var(--ink)}
 .product-detail{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;margin-top:28px;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
-.product-preview{display:grid;place-items:center;min-height:260px;background:var(--ink);border-radius:var(--radius-md);font-size:120px}.product-detail h3{font-size:28px;letter-spacing:-1px;margin:0 0 8px}.product-detail p{color:var(--mut)}.detail-price{font-size:24px;font-weight:800;margin:16px 0}.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.detail-meta span{background:var(--accent-soft);color:var(--acc-dark);padding:6px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.product-preview{display:grid;place-items:center;min-height:260px;padding:18px;background:linear-gradient(145deg,#f7f8f5,#e9ede8);border-radius:var(--radius-md);overflow:hidden}.product-preview svg{width:min(100%,320px);height:245px;filter:drop-shadow(0 18px 18px rgba(0,0,0,.18))}.product-detail h3{font-size:28px;letter-spacing:-1px;margin:0 0 8px}.product-detail p{color:var(--mut)}.detail-price{font-size:24px;font-weight:800;margin:16px 0}.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.detail-meta span{background:var(--accent-soft);color:var(--acc-dark);padding:6px 10px;border-radius:99px;font-size:12px;font-weight:700}
 .quality{width:100%;max-width:400px;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:13px}.quality-head{display:flex;justify-content:space-between;gap:12px;font-weight:700}.quality-status{color:var(--mut)}.quality-status.excellent{color:var(--success)}.quality-status.warning{color:#a56a00}.quality-status.low{color:var(--acc-dark)}.quality p{margin:5px 0 0;color:var(--mut);font-size:12px}.quality ul{margin:7px 0 0;padding-left:18px;color:var(--mut);font-size:12px}
 /* Product choices, Design Studio tools, canvas, print-area guide, and controls. */
 .cat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:22px;text-align:center;cursor:pointer;font-weight:600;transition:transform .2s,box-shadow .2s,border-color .2s}.cat:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cfd5ce}
-.cat span{display:block;font-size:30px}.cat.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
+.cat-preview{display:grid;place-items:center;height:94px;margin:0 0 12px;border-radius:10px;background:linear-gradient(145deg,#f0f1ed,#fafaf8);overflow:hidden}.cat-preview svg{width:100%;height:100%;filter:drop-shadow(0 6px 6px rgba(0,0,0,.14))}.cat.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
 .studio{display:grid;grid-template-columns:230px 1fr 260px;gap:16px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;box-shadow:0 8px 24px rgba(17,19,18,.03)}
 .panel h3{margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut)}
 .tool{display:block;width:100%;text-align:left;margin-bottom:8px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 .tool:hover{border-color:var(--acc)}
-.stage{display:flex;flex-direction:column;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px}
+.stage{display:flex;flex-direction:column;align-items:center;background:linear-gradient(145deg,var(--card),var(--bg));border:1px solid var(--line);border-radius:var(--radius-md);padding:18px}
 .canvasbox{position:relative;width:400px;max-width:100%;aspect-ratio:400/460}
 .canvasbox svg,.canvasbox .canvas-container{position:absolute;left:0;top:0}
 .canvasbox svg{width:100%;height:100%}
+.canvasbox svg{filter:drop-shadow(0 15px 17px rgba(16,20,17,.13))}
+.mockup-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;margin:12px 0 2px}.mockup-actions .btn{font-size:13px}.download-status{min-height:18px;color:var(--mut);font-size:12px;text-align:center}
 .area{position:absolute;left:34%;top:26%;width:32%;height:44%;border:2px dashed rgba(120,120,120,.6);border-radius:4px;pointer-events:none}
 .seg{display:flex;gap:6px;margin:12px 0}.seg button{padding:7px 16px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .seg button.on{background:var(--ink);color:var(--bg)}
@@ -79,7 +81,7 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
 /* Collapse columns and reveal the mobile navigation at smaller viewport widths. */
 @media(max-width:900px){header{padding:14px 18px}.wrap{padding:0 18px}.hero,.studio{grid-template-columns:1fr}.hero{padding:56px 0 42px}.hero-visual{min-height:280px}.mobile-menu{display:block;margin-left:8px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink)}nav{display:none}nav.open{display:flex;position:absolute;left:18px;right:18px;top:70px;flex-direction:column;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}nav.open a{padding:10px 12px}}
 @media(max-width:700px){.shop-tools,.product-detail{grid-template-columns:1fr}.product-preview{min-height:190px}}
-@media(max-width:520px){.hero h1{letter-spacing:-2px}.hero-actions .btn{width:100%;text-align:center}.proof{gap:16px}.hero-product{font-size:110px}}
+@media(max-width:520px){.hero h1{letter-spacing:-2px}.hero-actions .btn{width:100%;text-align:center}.proof{gap:16px}.hero-product{width:170px;height:205px}}
 </style></head><body>
 <!-- Accessibility shortcut and global navigation for the three main page sections. -->
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -89,7 +91,7 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
 <main id="main-content" class="wrap">
 <!-- Marketing introduction: primary design action and product discovery shortcut. -->
 <section class="hero"><div><p class="eyebrow">Custom printing, made personal</p><h1>Wear your <em>own design.</em></h1><p>Pick a product, upload your logo or artwork, add text, and see it on the garment live. Thoughtfully printed and delivered across Bangladesh.</p><div class="hero-actions"><button class="btn" onclick="location.hash='studio'">Start designing</button><button class="btn alt" onclick="location.hash='shop'">Explore products</button></div></div>
-<div class="hero-visual" aria-label="Custom printed T-shirt preview"><div class="hero-product">👕</div><div class="hero-note">Made for your story · ৳350+</div></div></section>
+<div class="hero-visual" aria-label="Custom printed T-shirt preview"><div class="hero-product" id="hero-product"></div><div class="hero-note">Made for your story · ৳350+</div></div></section>
 <div class="proof" aria-label="HPS service highlights"><div><strong>01</strong>Choose your product</div><div><strong>02</strong>Design it your way</div><div><strong>03</strong>We print & deliver</div></div>
 <!-- Sign-in and registration controls; authenticated account details are rendered here. -->
 <section class="account-panel" id="account"><h2>Customer account</h2><div id="account-content"><p class="account-message">Sign in to view your orders and keep your HPS activity connected.</p><div class="account-grid"><div><label for="account-email">Email</label><input id="account-email" type="email" autocomplete="email"><label for="account-password">Password</label><input id="account-password" type="password" minlength="8" autocomplete="current-password"><div class="account-actions"><button class="btn" onclick="login()">Sign in</button><button class="btn alt" onclick="register()">Create account</button></div></div><div id="account-message" class="account-message"></div></div></div></section>
@@ -121,7 +123,8 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
  </div>
  <div class="stage">
   <div class="seg" id="sides"><button class="on" data-s="front">Front</button><button data-s="back">Back</button></div>
-  <div class="canvasbox"><svg viewBox="0 0 400 460"><path id="shirt" stroke="#888" stroke-width="2"/></svg><div class="area"></div><canvas id="c" width="400" height="460"></canvas></div>
+  <div class="canvasbox"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" role="img" aria-label="Product mockup preview"></svg><div class="area"></div><canvas id="c" width="400" height="460"></canvas></div>
+  <div class="mockup-actions"><button class="btn alt" id="download-mockup" onclick="downloadMockup()">Download mockup PNG</button></div><div id="download-status" class="download-status" aria-live="polite"></div>
   <div style="font-size:12px;color:var(--mut)">Drag, resize and rotate inside the dashed print area</div>
   <div class="quality" id="quality" aria-live="polite"></div>
  </div>
@@ -157,11 +160,11 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
 // Product data used to render the prototype catalogue and calculate the on-screen estimate.
 // Final prices are re-checked by the server; this object is not the production database.
 const PRODUCTS={
- "T-Shirt":{i:"👕",p:350,category:"apparel",description:"A comfortable everyday tee made for bold artwork and easy styling.",colors:["Black","White","Red","Blue","Green","Yellow"]},
- "Hoodie":{i:"🧥",p:750,category:"apparel",description:"A soft heavyweight hoodie with room for expressive front or back designs.",colors:["Black","White","Red","Blue"]},
- "Denim":{i:"👖",p:1200,category:"apparel",description:"A durable denim layer for statement artwork and custom details.",colors:["Black","Blue"]},
- "Bag":{i:"👜",p:300,category:"accessories",description:"A reusable everyday bag that turns your artwork into a practical essential.",colors:["Black","White","Red"]},
- "Cap":{i:"🧢",p:250,category:"accessories",description:"A classic cap with a compact print area for logos and small designs.",colors:["Black","White","Red","Blue"]}
+ "T-Shirt":{i:"👕",p:350,category:"apparel",description:"A comfortable everyday tee made for bold artwork and easy styling.",colors:["Black","White","Red","Blue","Green","Yellow"],mockup:{sides:["front","back"],printAreas:{front:{left:34,top:31,width:32,height:37},back:{left:34,top:29,width:32,height:42}},safeAreas:{front:{left:38,top:35,width:24,height:29},back:{left:38,top:34,width:24,height:32}}}},
+ "Hoodie":{i:"🧥",p:750,category:"apparel",description:"A soft heavyweight hoodie with room for expressive front or back designs.",colors:["Black","White","Red","Blue"],mockup:{sides:["front","back"],printAreas:{front:{left:33,top:30,width:34,height:34},back:{left:32,top:29,width:36,height:39}},safeAreas:{front:{left:37,top:34,width:26,height:26},back:{left:37,top:34,width:26,height:30}}}},
+ "Denim":{i:"👖",p:1200,category:"apparel",description:"A durable denim jacket for statement artwork and custom details.",colors:["Black","Blue"],mockup:{sides:["front","back"],printAreas:{front:{left:55,top:33,width:19,height:17},back:{left:29,top:29,width:42,height:37}},safeAreas:{front:{left:58,top:36,width:13,height:11},back:{left:34,top:34,width:32,height:28}}}},
+ "Bag":{i:"👜",p:300,category:"accessories",description:"A reusable everyday bag that turns your artwork into a practical essential.",colors:["Black","White","Red"],mockup:{sides:["front","back"],printAreas:{front:{left:30,top:37,width:40,height:35},back:{left:30,top:37,width:40,height:35}},safeAreas:{front:{left:35,top:42,width:30,height:25},back:{left:35,top:42,width:30,height:25}}}},
+ "Cap":{i:"🧢",p:250,category:"accessories",description:"A classic cap with a compact print area for logos and small designs.",colors:["Black","White","Red","Blue"],mockup:{sides:["front","back"],printAreas:{front:{left:41,top:24,width:18,height:17},back:{left:43,top:26,width:14,height:17}},safeAreas:{front:{left:44,top:28,width:12,height:9},back:{left:46,top:30,width:8,height:9}}}}
 };
 // Display colors for the garment preview, and size-specific surcharges in the prototype.
 const COLORS={Black:"#111111",White:"#f5f5f5",Red:"#c62828",Blue:"#1565c0",Green:"#2e7d32",Yellow:"#f9a825"};
@@ -170,7 +173,7 @@ const SIZES={S:0,M:0,L:0,XL:0,XXL:50,"3XL":80};
 const TEMPLATES=["🎮 Gaming","💻 Cyber","❤️ Love","🎂 Birthday","⚽ Sports","🇧🇩 Bangladesh","🎓 Graduation","🎵 Music","😂 Funny"];
 const EMOJI=["🎮","💻","❤️","🎂","⚽","🇧🇩","🎓","🎵","😂"];
 // Shared UI state: selected product/options, both canvas sides, cart, and product detail selection.
-const S={g:"Men",p:"T-Shirt",c:"Black",side:"front",qty:1};const saved={front:null,back:null};const cart=[];let selectedProduct="T-Shirt";
+const S={g:"Men",p:"T-Shirt",c:"Black",side:"front",qty:1};const saved={};const cart=[];let selectedProduct="T-Shirt";
 // Short helper for looking up page elements by their HTML id.
 const $=id=>document.getElementById(id);
 // Toggle the mobile navigation menu and keep its accessibility state in sync.
@@ -179,38 +182,147 @@ function toggleNav(){const nav=$("main-nav"),button=document.querySelector(".mob
 const cv=new fabric.Canvas("c",{preserveObjectStacking:true});
 // Format a number using Bangladeshi taka and grouped thousands.
 const fmt=n=>"৳"+n.toLocaleString("en-IN");
+let mockupSerial=0;
+function savedSides(product=S.p){return saved[product]||(saved[product]={front:null,back:null})}
+function printGeometry(product=S.p,side=S.side){const mockup=PRODUCTS[product].mockup;return{print:mockup.printAreas[side],safe:mockup.safeAreas[side]}}
 
-// Draw the garment outline for the selected color and front/back neckline.
-function shirtPath(){const neck=S.side=="front"?"Q200,64 240,30":"Q200,44 240,30";
- $("shirt").setAttribute("d","M120,40 L160,30 "+neck+" L280,40 L370,110 L335,165 L295,140 L295,420 L105,420 L105,140 L65,165 L30,110 Z");
- $("shirt").setAttribute("fill",COLORS[S.c]);}
-// Rebuild the product filters/cards, color choices, product heading, preview, and price.
+function mockupPath(){
+ const svg=document.querySelector(".canvasbox svg");
+ const side=PRODUCTS[S.p].mockup.sides.includes(S.side)?S.side:PRODUCTS[S.p].mockup.sides[0];
+ svg.setAttribute("aria-label",`${S.p} ${side} product mockup`);
+ svg.innerHTML=mockupSvg(S.p,COLORS[S.c],side).replace(/^<svg[^>]*>|<\/svg>$/g,"");
+}
+function shirtPath(){mockupPath()}
+async function downloadMockup(){
+ const button=$("download-mockup"),status=$("download-status");
+ button.disabled=true;status.textContent="Preparing high-resolution mockup…";
+ let svgUrl="",pngUrl="";
+ try{
+  const svg=document.querySelector(".canvasbox svg");
+  svgUrl=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml;charset=utf-8"}));
+  const image=new Image();image.src=svgUrl;await image.decode();
+  const scale=3,output=document.createElement("canvas");output.width=400*scale;output.height=460*scale;
+  const context=output.getContext("2d");
+  if(!context)throw new Error("This browser could not create the PNG canvas.");
+  context.drawImage(image,0,0,output.width,output.height);
+  context.drawImage(cv.toCanvasElement(scale),0,0,output.width,output.height);
+  const png=await new Promise((resolve,reject)=>output.toBlob(blob=>blob?resolve(blob):reject(new Error("The browser could not encode the mockup PNG.")),"image/png"));
+  pngUrl=URL.createObjectURL(png);
+  const link=document.createElement("a");link.href=pngUrl;link.download=`hps-${S.p.toLowerCase().replace(/\s+/g,"-")}-${S.side}-mockup.png`;document.body.append(link);link.click();link.remove();
+  status.textContent="Mockup downloaded as a high-resolution PNG.";
+ }catch(error){
+  console.error("Mockup download failed:",error);
+  status.textContent=`Download failed: ${error.message}`;
+ }finally{
+  if(svgUrl)URL.revokeObjectURL(svgUrl);
+  if(pngUrl)setTimeout(()=>URL.revokeObjectURL(pngUrl),1000);
+  button.disabled=false;
+ }
+}
+function adjustColor(hex,amount){
+ const value=parseInt(hex.slice(1),16);
+ return "#"+[16,8,0].map(shift=>Math.max(0,Math.min(255,((value>>shift)&255)+amount)).toString(16).padStart(2,"0")).join("");
+}
+function mockupSvg(name,color,side="front"){
+ const light=adjustColor(color,42),dark=adjustColor(color,-45);
+ const id="mockup-"+(++mockupSerial);
+ let silhouette="",details="",behind="";
+ if(name==="T-Shirt"){
+  silhouette="M130 72 L165 56 Q200 78 235 56 L270 72 L342 110 L382 170 L336 195 L299 171 L299 403 Q200 422 101 403 L101 171 L64 195 L18 170 L58 110 Z";
+  details=`<path d="M164 60 Q200 87 236 60" fill="none" stroke="url(#edge)" stroke-width="5"/><path d="M168 62 Q200 86 232 62" fill="none" stroke="${dark}" stroke-opacity=".55" stroke-width="1.4"/><path d="M65 114 L104 137 M335 114 L296 137 M65 187 L98 168 M335 187 L302 168" class="seam"/><path d="M111 175 V391 M289 175 V391 M110 397 Q200 415 290 397" class="stitch"/><path d="M28 171 L63 186 M372 171 L337 186" class="stitch"/>${side==="back"?'<path d="M151 83 Q200 104 249 83" class="seam"/>':'<path d="M160 61 Q200 99 240 61" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="2"/>'}`;
+ }else if(name==="Hoodie"){
+  silhouette="M127 82 L164 64 Q200 82 236 64 L273 82 L338 112 L382 178 L337 210 L300 181 L300 402 Q200 421 100 402 L100 181 L63 210 L18 178 L62 112 Z";
+  behind=`<path d="M151 100 L134 80 Q132 48 158 31 Q200 6 242 31 Q268 48 266 80 L249 100 L235 82 Q200 67 165 82 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2.5"/>`;
+  details=side==="front"
+   ?`<path d="M162 82 Q200 68 238 82 L228 105 Q200 93 172 105 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M151 37 Q200 9 249 37 M144 66 L164 83 M256 66 L236 83" class="stitch"/><path d="M65 116 L102 141 M335 116 L298 141 M65 200 L98 176 M335 200 L302 176" class="seam"/><path d="M115 307 Q200 292 285 307 L278 363 Q200 377 122 363 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M122 312 Q200 300 278 312 M122 356 Q200 369 278 356" class="stitch"/><path d="M186 98 L181 161 M214 98 L219 161" class="stitch"/><circle cx="182" cy="99" r="3.5" fill="url(#metal)"/><circle cx="218" cy="99" r="3.5" fill="url(#metal)"/><path d="M111 182 V391 M289 182 V391 M109 398 Q200 415 291 398" class="stitch"/>`
+   :`<path d="M151 37 Q200 9 249 37 M145 68 L164 83 M255 68 L236 83" class="stitch"/><path d="M147 83 Q200 103 253 83" class="seam"/><path d="M65 116 L102 141 M335 116 L298 141 M65 200 L98 176 M335 200 L302 176" class="seam"/><path d="M200 103 V395 M111 182 V391 M289 182 V391 M109 398 Q200 415 291 398" class="stitch"/>`;
+ }else if(name==="Denim"){
+  silhouette="M115 79 L164 58 L198 80 L236 58 L285 79 L329 103 L350 162 L318 182 L298 160 L298 405 L102 405 L102 160 L82 182 L50 162 L71 103 Z";
+  details=side==="front"
+   ?`<path d="M164 60 L181 91 L198 80 L215 91 L236 60 L247 84 L200 111 L153 84 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M108 112 Q200 132 292 112 M107 119 Q200 139 293 119" class="stitch"/><path d="M194 103 L194 398 M206 103 L206 398" class="seam"/><path d="M120 146 L181 154 L174 211 L116 204 Z M219 154 L280 146 L284 204 L226 211 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M120 151 L176 158 M224 158 L280 151 M116 204 L174 211 M226 211 L284 204" class="stitch"/><path d="M112 222 L181 230 M219 230 L288 222 M109 393 L291 393" class="stitch"/><path d="M112 162 L112 390 M288 162 L288 390 M96 124 L112 165 M304 165 L320 124" class="seam"/><circle cx="200" cy="139" r="3" fill="url(#metal)"/><circle cx="200" cy="178" r="3" fill="url(#metal)"/><circle cx="200" cy="217" r="3" fill="url(#metal)"/><circle cx="200" cy="256" r="3" fill="url(#metal)"/><circle cx="200" cy="295" r="3" fill="url(#metal)"/>`
+   :`<path d="M115 84 L164 66 L198 89 L236 66 L285 84 L292 113 Q200 132 108 113 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M108 112 Q200 132 292 112 M107 119 Q200 139 293 119" class="stitch"/><path d="M200 112 V390 M112 162 L112 390 M288 162 L288 390" class="seam"/><path d="M123 268 L183 278 L178 333 L117 324 Z M217 278 L277 268 L283 324 L222 333 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M123 273 L178 282 M222 282 L277 273 M117 324 L178 333 M222 333 L283 324 M109 393 L291 393" class="stitch"/><path d="M96 124 L112 165 M304 165 L320 124" class="seam"/>`;
+ }else if(name==="Bag"){
+  silhouette="M105 133 L295 133 L326 397 Q200 418 74 397 Z";
+  details=side==="front"
+   ?`<path d="M143 145 L143 101 Q143 55 200 55 Q257 55 257 101 L257 145" fill="none" stroke="url(#edge)" stroke-width="17" stroke-linecap="round"/><path d="M143 145 L143 101 Q143 66 200 66 Q257 66 257 145" fill="none" stroke="url(#fabric)" stroke-width="11" stroke-linecap="round"/><path d="M104 144 Q200 159 296 144 M82 386 Q200 405 318 386" class="stitch"/><path d="M92 157 L116 366 M308 157 L284 366" class="seam"/><path d="M128 170 L272 170" class="stitch"/><path d="M97 157 L119 159 M281 159 L303 157" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="3"/>`
+   :`<path d="M143 145 L143 101 Q143 55 200 55 Q257 55 257 101 L257 145" fill="none" stroke="url(#edge)" stroke-width="17" stroke-linecap="round"/><path d="M143 145 L143 101 Q143 66 200 66 L200 145" fill="none" stroke="url(#fabric)" stroke-width="11" stroke-linecap="round"/><path d="M105 151 Q200 166 295 151 M82 386 Q200 405 318 386" class="stitch"/><path d="M92 157 L116 366 M308 157 L284 366" class="seam"/><path d="M148 238 L252 238 L264 325 L136 325 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2"/><path d="M154 246 L246 246 M142 316 L258 316" class="stitch"/><path d="M162 259 H238 M162 271 H238" class="seam"/>`;
+ }else{
+  silhouette="M78 151 Q88 79 200 57 Q312 79 322 151 L307 224 Q200 260 93 224 Z";
+  details=side==="front"
+   ?`<path d="M92 205 Q200 183 308 205 Q346 216 366 247 Q292 270 210 254 Q139 245 90 224 Z" fill="url(#fabric)" stroke="url(#edge)" stroke-width="2.5"/><path d="M95 217 Q206 254 347 240" class="stitch"/><path d="M200 68 L200 225 M112 104 Q147 132 151 225 M288 104 Q253 132 249 225" class="seam"/><path d="M112 113 Q145 128 154 142 M288 113 Q255 128 246 142" class="stitch"/><path d="M179 82 Q200 75 221 82" fill="none" stroke="url(#edge)" stroke-width="6" stroke-linecap="round"/><circle cx="122" cy="152" r="3" fill="url(#metal)"/><circle cx="278" cy="152" r="3" fill="url(#metal)"/>`
+   :`<path d="M113 156 Q200 177 287 156" fill="none" stroke="url(#edge)" stroke-width="10" stroke-linecap="round"/><path d="M128 160 Q200 178 272 160" class="stitch"/><path d="M200 68 L200 225 M112 104 Q147 132 151 225 M288 104 Q253 132 249 225" class="seam"/><path d="M112 113 Q145 128 154 142 M288 113 Q255 128 246 142" class="stitch"/><path d="M153 190 Q200 207 247 190 L243 220 Q200 236 157 220 Z" fill="${dark}" stroke="url(#edge)" stroke-width="2"/><path d="M156 197 Q200 213 244 197" class="stitch"/><path d="M179 82 Q200 75 221 82" fill="none" stroke="url(#edge)" stroke-width="6" stroke-linecap="round"/><path d="M181 165 Q200 171 219 165" fill="none" stroke="url(#metal)" stroke-width="8" stroke-linecap="round"/><circle cx="178" cy="164" r="3" fill="url(#metal)"/><circle cx="222" cy="164" r="3" fill="url(#metal)"/>`;
+ }
+ return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="460" viewBox="0 0 400 460" role="img" aria-label="${name} ${side} mockup"><defs><linearGradient id="${id}-studio" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fafbf8"/><stop offset="1" stop-color="#e9ede8"/></linearGradient><linearGradient id="${id}-fabric" x1="0" y1="0" x2="1" y2=".72"><stop stop-color="${light}"/><stop offset=".36" stop-color="${color}"/><stop offset="1" stop-color="${dark}"/></linearGradient><linearGradient id="${id}-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${light}"/><stop offset=".52" stop-color="${color}"/><stop offset="1" stop-color="${dark}"/></linearGradient><linearGradient id="${id}-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff6d4"/><stop offset=".45" stop-color="#b6a47a"/><stop offset="1" stop-color="#655a46"/></linearGradient><linearGradient id="${id}-weave" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#141816" stop-opacity=".3"/></linearGradient><pattern id="${id}-texture" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(18)"><path d="M0 0V8 M4 0V8" stroke="url(#${id}-weave)" stroke-width=".8" opacity=".55"/></pattern><filter id="${id}-lift" x="-.25" y="-.2" width="1.5" height="1.55"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#18201b" flood-opacity=".2"/></filter><clipPath id="${id}-fabric-clip"><path d="${silhouette}"/></clipPath></defs><rect width="400" height="460" fill="url(#${id}-studio)"/><ellipse cx="200" cy="${name==="Cap"?278:412}" rx="${name==="Cap"?143:127}" ry="16" fill="#25302a" opacity=".12"/><ellipse cx="200" cy="150" rx="145" ry="150" fill="#fff" opacity=".27"/><g filter="url(#${id}-lift)">${behind.replaceAll("url(#fabric)","url(#"+id+"-fabric)").replaceAll("url(#edge)","url(#"+id+"-edge)")}<path d="${silhouette}" fill="url(#${id}-fabric)" stroke="url(#${id}-edge)" stroke-width="2.5" stroke-linejoin="round"/>${details.replaceAll("url(#fabric)","url(#"+id+"-fabric)").replaceAll("url(#edge)","url(#"+id+"-edge)").replaceAll("url(#metal)","url(#"+id+"-metal)")}<rect x="0" y="0" width="400" height="460" fill="url(#${id}-texture)" clip-path="url(#${id}-fabric-clip)" opacity=".36"/><path d="${silhouette}" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5" stroke-linejoin="round"/><style>.seam{fill:none;stroke:rgba(25,30,27,.3);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.stitch{fill:none;stroke:rgba(255,255,255,.58);stroke-width:1.15;stroke-dasharray:3 4;stroke-linecap:round;stroke-linejoin:round}</style></g></svg>`;
+}
+function updateMockupLayout(){
+ const product=PRODUCTS[S.p];
+ const {mockup}=product;
+ const sides=mockup.sides || ["front"];
+ if(!sides.includes(S.side)){S.side=sides[0];}
+ $("sides").innerHTML=sides.map(side=>`<button class="${side===S.side?"on":""}" data-s="${side}">${side.charAt(0).toUpperCase()+side.slice(1)}</button>`).join("");
+ $("size").innerHTML=Object.keys(SIZES).filter(s => (product.category === "accessories" ? (s === "S" || s === "M" || s === "L") : true)).map(s=>`<option value="${s}">${s}${SIZES[s]?" (+৳"+SIZES[s]+")":""}</option>`).join("");
+ if(!Array.from($("size").options).some(option=>option.value===($("size").value||"L"))){ $("size").value=product.category === "accessories" ? "M" : "L"; }
+ $("size").disabled = product.category === "accessories";
+ const {print,safe}=printGeometry(S.p,S.side);
+ const area = document.querySelector(".area");
+ area.style.left = `${print.left}%`;
+ area.style.top = `${print.top}%`;
+ area.style.width = `${print.width}%`;
+ area.style.height = `${print.height}%`;
+ area.style.borderColor = product.category === "accessories" ? "rgba(212, 112, 72, 0.8)" : "rgba(120,120,120,.6)";
+ area.style.background = "rgba(220,75,46,0.045)";
+ document.querySelector(".canvasbox").setAttribute("data-product", S.p.toLowerCase().replace(/\s+/g,"-"));
+ $("pname").textContent=S.g+" · "+S.p;
+ $("quality").dataset.product = S.p;
+ }
+function switchSide(side){
+ if(side===S.side||!PRODUCTS[S.p].mockup.sides.includes(side)) return;
+ saveEditorState();
+ S.side=side;
+ updateMockupLayout();
+ [...$("sides").children].forEach(b=>b.classList.toggle("on",b.dataset.s==side));
+ cv.clear();
+ mockupPath();
+ restoreEditorState();
+}
+function saveEditorState(){const states=savedSides();states[S.side]=JSON.stringify(cv.toJSON());localStorage.setItem(designKey(),states[S.side])}
+function restoreEditorState(){
+ const states=savedSides(),data=states[S.side]||localStorage.getItem(designKey());
+ if(!data){price();return}
+ states[S.side]=data;
+ cv.loadFromJSON(data,()=>{cv.renderAll();price()});
+}
 function build(){
  $("gender").innerHTML=["Men","Women","Unisex"].map(g=>`<button class="${g==S.g?"on":""}" onclick="S.g='${g}';build()">${g}</button>`).join("");
  const query=$("product-search").value.trim().toLowerCase(),category=$("category-filter").value,priceFilter=$("price-filter").value;
  const products=Object.keys(PRODUCTS).filter(k=>{const p=PRODUCTS[k],text=!query||k.toLowerCase().includes(query)||p.description.toLowerCase().includes(query),cat=category=="all"||p.category==category,price=priceFilter=="all"||(priceFilter=="under500"&&p.p<500)||(priceFilter=="500to1000"&&p.p>=500&&p.p<=1000)||(priceFilter=="over1000"&&p.p>1000);return text&&cat&&price});
  $("product-count").textContent=`${products.length} product${products.length==1?"":"s"} available`;
- $("cats").innerHTML=products.length?products.map(k=>`<div class="cat ${k==S.p?"on":""}" tabindex="0" role="button" onclick="selectProduct('${k}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProduct('${k}')"><span>${PRODUCTS[k].i}</span>${k}<div style="font-weight:400;font-size:13px;color:var(--mut)">from ${fmt(PRODUCTS[k].p)}</div></div>`).join(""):'<p style="color:var(--mut)">No products match your filters.</p>';
+ $("cats").innerHTML=products.length?products.map(k=>`<div class="cat ${k==S.p?"on":""}" tabindex="0" role="button" onclick="selectProduct('${k}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProduct('${k}')"><div class="cat-preview">${mockupSvg(k,COLORS[PRODUCTS[k].colors[0]])}</div>${k}<div style="font-weight:400;font-size:13px;color:var(--mut)">from ${fmt(PRODUCTS[k].p)}</div></div>`).join(""):'<p style="color:var(--mut)">No products match your filters.</p>';
+ $("download-status").textContent="";
  $("colors").innerHTML=PRODUCTS[S.p].colors.map(k=>`<i title="${k}" class="${k==S.c?"on":""}" style="background:${COLORS[k]}" onclick="S.c='${k}';build()"></i>`).join("");
- $("pname").textContent=S.g+" · "+S.p;renderProductDetail();shirtPath();price();}
-// Update the selected product, choose an available color, and bring its detail panel into view.
-function selectProduct(k){S.p=k;selectedProduct=k;if(!PRODUCTS[k].colors.includes(S.c))S.c=PRODUCTS[k].colors[0];build();$("product-detail").scrollIntoView({behavior:"smooth",block:"start"})}
-// Render the selected product's description and button that jumps into the editor.
-function renderProductDetail(){const p=PRODUCTS[selectedProduct];$("product-detail").innerHTML=`<div class="product-preview" aria-label="${selectedProduct} preview">${p.i}</div><div><p class="eyebrow">Product details</p><h3>${selectedProduct}</h3><p>${p.description}</p><div class="detail-price">From ${fmt(p.p)}</div><div class="detail-meta"><span>${p.category=="apparel"?"Apparel":"Accessory"}</span><span>Front and back print areas</span><span>Made to order</span></div><button class="btn" onclick="S.p='${selectedProduct}';build();location.hash='studio'">Customize this product</button></div>`}
-// Fill the size dropdown and template buttons once the page controls exist.
-$("size").innerHTML=Object.keys(SIZES).map(s=>`<option value="${s}">${s}${SIZES[s]?" (+৳"+SIZES[s]+")":""}</option>`).join("");
-$("size").value="L";
+ updateMockupLayout();
+ renderProductDetail();
+ $("hero-product").innerHTML=mockupSvg("T-Shirt",COLORS.Black);
+ mockupPath();
+ price();
+}
+function selectProduct(k){if(k===S.p)return;saveEditorState();S.p=k;selectedProduct=k;S.side=PRODUCTS[k].mockup.sides.includes(S.side)?S.side:"front";if(!PRODUCTS[k].colors.includes(S.c))S.c=PRODUCTS[k].colors[0];cv.clear();build();restoreEditorState();$("product-detail").scrollIntoView({behavior:"smooth",block:"start"})}
+function renderProductDetail(){const p=PRODUCTS[selectedProduct],color=selectedProduct===S.p?COLORS[S.c]:COLORS[p.colors[0]];$("product-detail").innerHTML=`<div class="product-preview">${mockupSvg(selectedProduct,color)}</div><div><p class="eyebrow">Product details</p><h3>${selectedProduct}</h3><p>${p.description}</p><div class="detail-price">From ${fmt(p.p)}</div><div class="detail-meta"><span>${p.category=="apparel"?"Apparel":"Accessory"}</span><span>${p.mockup.sides.includes("back")?"Front and back print areas":"Front print area"}</span><span>Made to order</span></div><button class="btn" onclick="S.p='${selectedProduct}';build();location.hash='studio'">Customize this product</button></div>`}
 $("tmpl").innerHTML=TEMPLATES.map((t,i)=>`<button onclick="tpl(${i})">${t}</button>`).join("");
 ["product-search","category-filter","price-filter"].forEach(id=>$(id).oninput=build);
 
 // Return only the user's artwork objects; the garment and dashed overlay are separate HTML/SVG.
 function userObjs(){return cv.getObjects()}
 // Compare artwork bounds with the printable and safer inner regions, then show guidance.
-function quality(){const objects=userObjs(),print={left:136,top:120,right:264,bottom:322},safe={left:148,top:132,right:252,bottom:310};if(!objects.length){$("quality").innerHTML='<div class="quality-head"><span>Print quality</span><span class="quality-status">Not started</span></div><p>Add artwork to see print-quality feedback.</p>';return}
- let outside=false,unsafe=false;objects.forEach(o=>{const r=o.getBoundingRect(true,true);const right=r.left+r.width,bottom=r.top+r.height;if(r.left<print.left||r.top<print.top||right>print.right||bottom>print.bottom)outside=true;if(r.left<safe.left||r.top<safe.top||right>safe.right||bottom>safe.bottom)unsafe=true});
+function quality(){
+ const {print,safe}=printGeometry();
+ const objects=userObjs();
+ if(!objects.length){$("quality").innerHTML='<div class="quality-head"><span>Print quality</span><span class="quality-status">Not started</span></div><p>Add artwork to see print-quality feedback.</p>';return}
+ let outside=false,unsafe=false;
+ objects.forEach(o=>{const r=o.getBoundingRect(true,true);const right=r.left+r.width,bottom=r.top+r.height;const bounds={left:r.left/cv.getWidth()*100,top:r.top/cv.getHeight()*100,right:right/cv.getWidth()*100,bottom:bottom/cv.getHeight()*100};if(bounds.left<print.left||bounds.top<print.top||bounds.right>print.left+print.width||bounds.bottom>print.top+print.height)outside=true;if(bounds.left<safe.left||bounds.top<safe.top||bounds.right>safe.left+safe.width||bounds.bottom>safe.top+safe.height)unsafe=true});
  const status=outside?"Low":unsafe?"Good":"Excellent",className=outside?"low":unsafe?"warning":"excellent";let message=outside?"Move artwork inside the dashed print area before ordering.":unsafe?"Artwork is printable, but close to the safe-area boundary.":"Artwork fits the recommended safe area.";const tips=outside?'<ul><li>Keep important text and logos away from the edge.</li><li>Resize or reposition the selected artwork.</li></ul>':`<p>${message}</p>`;$("quality").innerHTML=`<div class="quality-head"><span>Print quality</span><span class="quality-status ${className}">${status}</span></div>${tips}`}
 // Report whether there is artwork on either side, including the side not currently visible.
-function printedSides(){const cur=userObjs().length>0,f=S.side=="front"?cur:!!(saved.front&&JSON.parse(saved.front).objects.length),b=S.side=="back"?cur:!!(saved.back&&JSON.parse(saved.back).objects.length);return{f,b}}
+function printedSides(){const cur=userObjs().length>0,states=savedSides(),hasArtwork=side=>{const data=states[side]||localStorage.getItem(`hps-design-${S.p}-${side}`);return !!(data&&JSON.parse(data).objects.length)};return{f:S.side==="front"?cur:hasArtwork("front"),b:S.side==="back"?cur:hasArtwork("back")}}
 // Calculate an estimated unit price from the selected base product and print options.
 function calc(){const b=PRODUCTS[S.p].p,{f,b:bk}=printedSides(),sz=SIZES[$("size").value],ex=$("exp").checked?100:0;
  const lines=[["Base "+S.p,b],["Front print",f?100:0],["Back print",bk?100:0],["Size "+$("size").value,sz],["Express",ex]].filter(l=>l[1]);
@@ -227,11 +339,11 @@ cv.on("object:modified",price);
 // Place a new object at the center of the editor canvas and refresh its selection bounds.
 function fit(o){o.set({originX:"center",originY:"center",left:200,top:230});o.setCoords()}
 // Keep local saved artwork separate for every product and print side.
-function designKey(){return `hps-design-${S.p}-${S.side}`}
+function designKey(product=S.p,side=S.side){return `hps-design-${product}-${side}`}
 // Save the current canvas locally first, then optionally sync a new account version.
-async function saveDesign(){saved[S.side]=JSON.stringify(cv.toJSON());localStorage.setItem(designKey(),saved[S.side]);const editorState={front:saved.front?JSON.parse(saved.front):null,back:saved.back?JSON.parse(saved.back):null};const designKeyForProduct=`hps-design-id-${S.p}`;const qualityStatus=($("quality").querySelector(".quality-status")?.textContent||"Not started").toLowerCase().replace(/\s+/g,"_");const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent="Design saved on this device."; $("quality").append(note);try{const account=await accountRequest("/api/auth/me","GET");if(!account.user){note.textContent+=" Sign in to back it up to your account.";return}const payload={productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:`${S.g} ${S.p} design`,editorState,qualityStatus};let designId=localStorage.getItem(designKeyForProduct);let result;if(designId){try{result=await accountRequest(`/api/designs/${designId}/versions`,"POST",payload)}catch(error){if(!error.message.includes("Design not found"))throw error;localStorage.removeItem(designKeyForProduct)}}if(!result){result=await accountRequest("/api/designs","POST",payload);designId=result.design.id;localStorage.setItem(designKeyForProduct,designId)}note.textContent=`Design saved on this device and to your account (version ${result.design.currentVersion}).`}catch(error){note.style.color="var(--acc-dark)";note.textContent=`Saved on this device, but account backup failed: ${error.message}`}}
+async function saveDesign(){saveEditorState();const states=savedSides();const editorState={front:states.front?JSON.parse(states.front):null,back:states.back?JSON.parse(states.back):null};const designKeyForProduct=`hps-design-id-${S.p}`;const qualityStatus=($("quality").querySelector(".quality-status")?.textContent||"Not started").toLowerCase().replace(/\s+/g,"_");const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent="Design saved on this device."; $("quality").append(note);try{const account=await accountRequest("/api/auth/me","GET");if(!account.user){note.textContent+=" Sign in to back it up to your account.";return}const payload={productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:`${S.g} ${S.p} design`,editorState,qualityStatus};let designId=localStorage.getItem(designKeyForProduct);let result;if(designId){try{result=await accountRequest(`/api/designs/${designId}/versions`,"POST",payload)}catch(error){if(!error.message.includes("Design not found"))throw error;localStorage.removeItem(designKeyForProduct)}}if(!result){result=await accountRequest("/api/designs","POST",payload);designId=result.design.id;localStorage.setItem(designKeyForProduct,designId)}note.textContent=`Design saved on this device and to your account (version ${result.design.currentVersion}).`}catch(error){note.style.color="var(--acc-dark)";note.textContent=`Saved on this device, but account backup failed: ${error.message}`}}
 // Load local artwork immediately; if signed in, fetch the latest account version as well.
-async function loadDesign(){const localData=localStorage.getItem(designKey());if(localData){saved[S.side]=localData;cv.loadFromJSON(localData,()=>{cv.renderAll();price()})}else{$("quality").insertAdjacentHTML("beforeend",'<p style="color:var(--acc-dark);font-weight:700">No saved design for this product side on this device.</p>')}try{const account=await accountRequest("/api/auth/me","GET");if(!account.user)return;const designKeyForProduct=`hps-design-id-${S.p}`;let designId=localStorage.getItem(designKeyForProduct);if(!designId){const listing=await accountRequest("/api/designs","GET");designId=listing.designs.find(design=>design.productId===S.p.toLowerCase().replace(/\s+/g,"-"))?.id;if(!designId)return;localStorage.setItem(designKeyForProduct,designId)}const result=await accountRequest(`/api/designs/${designId}`,"GET");saved.front=result.design.editorState.front?JSON.stringify(result.design.editorState.front):null;saved.back=result.design.editorState.back?JSON.stringify(result.design.editorState.back):null;["front","back"].forEach(side=>{const data=saved[side];if(data)localStorage.setItem(`hps-design-${S.p}-${side}`,data);else localStorage.removeItem(`hps-design-${S.p}-${side}`)});cv.clear();shirtPath();if(saved[S.side])cv.loadFromJSON(saved[S.side],()=>{cv.renderAll();price()});else price();const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent=`Version ${result.design.currentVersion} loaded from your account.`;$("quality").append(note)}catch(error){const note=document.createElement("p");note.style.color="var(--acc-dark)";note.textContent=`Could not load account backup: ${error.message}`;$("quality").append(note)}}
+async function loadDesign(){const states=savedSides(),localData=localStorage.getItem(designKey());if(localData){states[S.side]=localData;cv.loadFromJSON(localData,()=>{cv.renderAll();price()})}else{$("quality").insertAdjacentHTML("beforeend",'<p style="color:var(--acc-dark);font-weight:700">No saved design for this product side on this device.</p>')}try{const account=await accountRequest("/api/auth/me","GET");if(!account.user)return;const designKeyForProduct=`hps-design-id-${S.p}`;let designId=localStorage.getItem(designKeyForProduct);if(!designId){const listing=await accountRequest("/api/designs","GET");designId=listing.designs.find(design=>design.productId===S.p.toLowerCase().replace(/\s+/g,"-"))?.id;if(!designId)return;localStorage.setItem(designKeyForProduct,designId)}const result=await accountRequest(`/api/designs/${designId}`,"GET");states.front=result.design.editorState.front?JSON.stringify(result.design.editorState.front):null;states.back=result.design.editorState.back?JSON.stringify(result.design.editorState.back):null;["front","back"].forEach(side=>{const data=states[side];if(data)localStorage.setItem(`hps-design-${S.p}-${side}`,data);else localStorage.removeItem(`hps-design-${S.p}-${side}`)});cv.clear();mockupPath();restoreEditorState();const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent=`Version ${result.design.currentVersion} loaded from your account.`;$("quality").append(note)}catch(error){const note=document.createElement("p");note.style.color="var(--acc-dark)";note.textContent=`Could not load account backup: ${error.message}`;$("quality").append(note)}}
 // Validate and read an uploaded image as a browser data URL for Fabric.js.
 $("file").onchange=e=>{const f=e.target.files[0];if(!f)return;
  if(!/^image\/(png|jpeg|svg\+xml)$/.test(f.type)||f.size>10*1048576){alert("Use PNG, JPG or SVG under 10 MB.");return}
@@ -252,20 +364,16 @@ $("op").oninput=e=>{const a=cv.getActiveObject();if(a){a.set("opacity",e.target.
 document.addEventListener("keydown",e=>{if(e.key=="Delete"&&!(cv.getActiveObject()&&cv.getActiveObject().isEditing))del()});
 
 // Preserve the outgoing side, switch the visible shirt, and restore that side's artwork.
-$("sides").onclick=e=>{const s=e.target.dataset.s;if(!s||s==S.side)return;
- saved[S.side]=JSON.stringify(cv.toJSON());S.side=s;
- [...$("sides").children].forEach(b=>b.classList.toggle("on",b.dataset.s==s));
- cv.clear();shirtPath();const data=saved[s]||localStorage.getItem(designKey());if(data){saved[s]=data;cv.loadFromJSON(data,()=>{cv.renderAll();price()})}else price()};
+$("sides").onclick=e=>{const s=e.target.dataset.s;if(s)switchSide(s)};
 
 // Rasterize a small visual cart thumbnail from the garment color and current canvas artwork.
-function preview(){const w=document.createElement("canvas");w.width=200;w.height=230;const x=w.getContext("2d");
- x.fillStyle=COLORS[S.c];x.fillRect(50,15,100,200);x.drawImage(cv.getElement(),0,0,200,230);return w.toDataURL()}
+async function preview(){const w=document.createElement("canvas");w.width=400;w.height=460;const x=w.getContext("2d");if(!x)throw new Error("Could not create a cart preview.");const url=URL.createObjectURL(new Blob([mockupSvg(S.p,COLORS[S.c],S.side)],{type:"image/svg+xml;charset=utf-8"}));try{const image=new Image();image.src=url;await image.decode();x.drawImage(image,0,0,w.width,w.height);x.drawImage(cv.toCanvasElement(1),0,0,w.width,w.height);return w.toDataURL()}finally{URL.revokeObjectURL(url)}}
 // Save the current cart array in this browser so it survives a page refresh.
 function persistCart(){localStorage.setItem("hps-cart",JSON.stringify(cart))}
 // Add the current product configuration and artwork thumbnail to the browser cart.
-function addCart(){const c=calc();const p=printedSides();
+async function addCart(){const c=calc();const p=printedSides();
  if(!p.f&&!p.b&&!confirm("No design added yet. Add plain product to cart?"))return;
- cart.push({productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:S.g+" "+S.p,color:S.c,size:$("size").value,qty:S.qty,unit:c.unit,printSides:[...(p.f?["front"]:[]),...(p.b?["back"]:[])],express:$("exp").checked,f:p.f,b:p.b,img:preview()});persistCart();renderCart();toggleCart(true)}
+ try{const image=await preview();cart.push({productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:S.g+" "+S.p,color:S.c,size:$("size").value,qty:S.qty,unit:c.unit,printSides:[...(p.f?["front"]:[]),...(p.b?["back"]:[])],express:$("exp").checked,f:p.f,b:p.b,img:image});persistCart();renderCart();toggleCart(true)}catch(error){console.error("Cart preview generation failed:",error);$("download-status").textContent=`Could not create product preview: ${error.message}`}}
 // Render cart line items and provisional totals, then ask the API to verify the price.
 function renderCart(){$("cc").textContent=cart.reduce((a,c)=>a+c.qty,0);
  $("items").innerHTML=cart.length?cart.map((c,i)=>`<div class="item"><img src="${c.img}"><div style="flex:1"><b>${c.name}</b><br>${c.color} · ${c.size}<div class="item-actions"><button aria-label="Decrease ${c.name} quantity" onclick="changeCartQty(${i},-1)">−</button><b>×${c.qty}</b><button aria-label="Increase ${c.name} quantity" onclick="changeCartQty(${i},1)">+</button><a href="#" onclick="removeCartItem(${i});return false" style="font-size:12px;color:var(--acc);margin-left:6px">remove</a></div></div><div>${fmt(c.unit*c.qty)}</div></div>`).join(""):'<p style="color:var(--mut)">Cart is empty.</p>';
@@ -300,6 +408,6 @@ async function place(){if(!cart.length)return;const phone=$("ph").value.trim().r
 // Restore the previously saved cart; discard malformed local data rather than breaking startup.
 const storedCart=localStorage.getItem("hps-cart");if(storedCart){try{const parsed=JSON.parse(storedCart);if(Array.isArray(parsed))cart.push(...parsed)}catch(e){localStorage.removeItem("hps-cart")}}
 // Initial page render and session refresh after all required markup and functions are available.
-build();renderCart();
+build();restoreEditorState();renderCart();
 loadAccount();
 </script></body></html>
