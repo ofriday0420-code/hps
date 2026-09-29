@@ -40,18 +40,23 @@ npm start
 
 The API exposes `GET /api/health`, `GET /api/products`, and `POST /api/cart/quote`. Product prices, variant validation, print surcharges, express fees and delivery fees are calculated by the server.
 
-Orders are currently persisted in `data/orders.json` as a temporary development store. This is an intentional transition layer; production deployment should replace it with PostgreSQL or MySQL before launch.
+When PostgreSQL is configured, customer accounts, sessions, orders and order items are stored in PostgreSQL. Without it, users and orders use the JSON development files. Catalog and quote calculation remain based on `data/products.json`.
 
 Authentication endpoints are available at `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, and `GET /api/auth/me`. Passwords are hashed with Node's `scrypt`, and login creates an HttpOnly session cookie. User records are currently stored in `data/users.json` for development only.
 
 `GET /api/orders` requires an authenticated session and returns only orders belonging to that customer. The storefront includes the initial account panel for sign-in, registration and order-history display.
+
+Signed-in customers can also use `GET /api/designs`, `POST /api/designs`, `GET /api/designs/:id`, and `POST /api/designs/:id/versions` to keep design editor state with their account. The Design Studio saves locally first and syncs to the account when signed in; account backups preserve immutable versions and can be loaded on another device. JSON mode stores these designs in the ignored development file `data/designs.json`.
+
+Signed-in address book endpoints are `GET/POST /api/addresses` and `PUT/DELETE /api/addresses/:id`. Checkout can select a saved address, create one, or update the selected address. JSON mode stores these in the ignored development file `data/addresses.json`.
 
 ## PostgreSQL setup
 
 1. Copy `.env.example` to `.env` and set `DATABASE_URL`.
 2. Install dependencies with `npm install`.
 3. Run `npm run db:migrate`.
-4. Start the API with `npm start`.
+4. Run `npm run db:seed` to populate products and variants required by order foreign keys.
+5. Start the API with `npm start`.
 
 Without `DATABASE_URL`, the API explicitly reports `json-development` storage and continues using the temporary JSON transition layer. Do not commit `.env` or database credentials.
 
