@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
+<!--
+  HPS Custom Print & Design storefront
+  This is a single-file prototype: page structure, styles, and browser behavior
+  are kept together so the current experience is easy to open and understand.
+-->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Create custom printed apparel and accessories with HPS Custom Print & Design.">
 <meta name="theme-color" content="#111312">
 <title>HPS Custom Print & Design — Wear your own design</title>
+<!-- Fabric.js provides the interactive canvas used by the Design Studio below. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 <style>
+/* Design tokens and safe-area spacing shared throughout the storefront. */
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f7f7f4;--card:#fff;--ink:#111312;--mut:#68706c;--line:#e1e5df;--acc:#dc4b2e;--acc-dark:#b93b23;--accent-soft:#fff0eb;--success:#2f7d58;--shadow:0 18px 50px rgba(17,19,18,.08);--radius-lg:24px;--radius-md:14px}
+/* Follow the operating-system dark preference unless light is explicitly selected. */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151413;--card:#201f1d;--ink:#f3efe8;--mut:#a29d92;--line:#33312d;--acc:#ff6b3d;--acc-dark:#ff815c;--accent-soft:#3b211b}}
 :root[data-theme="dark"]{--bg:#151413;--card:#201f1d;--ink:#f3efe8;--mut:#a29d92;--line:#33312d;--acc:#ff6b3d;--acc-dark:#ff815c;--accent-soft:#3b211b}
+/* Global box sizing, smooth anchor navigation, and default page typography. */
 *,*:before,*:after{box-sizing:inherit}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+/* Keyboard users can jump straight to the main content. */
 a{color:inherit}.skip-link{position:absolute;left:16px;top:-50px;z-index:20;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px}.skip-link:focus{top:16px}
+/* Sticky brand header, navigation links, and account/order summary styles. */
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(247,247,244,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .logo{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:20px;letter-spacing:-.5px;text-decoration:none}.logo-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--ink);color:#fff;font-size:13px;letter-spacing:-1px}.logo b{color:var(--acc)}
 nav{display:flex;align-items:center;gap:26px}nav a{color:var(--mut);text-decoration:none;font-size:14px;font-weight:600}nav a:hover,nav a:focus-visible{color:var(--ink)}.account-panel{margin:20px 0;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow)}.account-panel h2{margin:0 0 12px;font-size:22px}.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.account-panel input{margin-bottom:8px}.account-actions{display:flex;flex-wrap:wrap;gap:8px}.account-message{margin-top:10px;font-size:13px;color:var(--mut)}.order-card{padding:12px 0;border-top:1px solid var(--line);font-size:13px}.order-card strong{font-size:15px}.order-card span{color:var(--mut)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(220,75,46,.3);outline-offset:2px}
+/* Reusable primary and secondary button appearances. */
 button{font:inherit;cursor:pointer}
 .btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-weight:700;transition:transform .2s,background .2s}.btn:hover{background:var(--acc-dark);transform:translateY(-1px)}
 .btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+/* Main content width and two-column hero layout. */
 .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
 .hero{padding:82px 0 64px;display:grid;gap:42px;grid-template-columns:1.08fr .92fr;align-items:center}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;color:var(--acc-dark);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.eyebrow:before{content:"";width:24px;height:2px;background:var(--acc)}
 .hero h1{font-size:clamp(40px,5vw,70px);line-height:1.01;margin:0 0 18px;letter-spacing:-3px;max-width:650px}.hero h1 em{color:var(--acc);font-style:normal}
 .hero p{color:var(--mut);max-width:50ch}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.hero-visual{position:relative;min-height:360px;background:var(--ink);border-radius:var(--radius-lg);display:grid;place-items:center;overflow:hidden;box-shadow:var(--shadow)}.hero-visual:before,.hero-visual:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.12);border-radius:50%}.hero-visual:before{width:340px;height:340px}.hero-visual:after{width:220px;height:220px}.hero-product{position:relative;z-index:1;font-size:150px;filter:drop-shadow(0 20px 14px rgba(0,0,0,.25));transform:rotate(-7deg)}.hero-note{position:absolute;z-index:2;right:22px;bottom:22px;background:#fff;color:var(--ink);border-radius:12px;padding:10px 13px;font-size:12px;font-weight:700;box-shadow:0 10px 28px rgba(0,0,0,.2)}
 .proof{display:flex;flex-wrap:wrap;gap:24px;padding:18px 0 38px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}.proof strong{display:block;color:var(--ink);font-size:17px}
+/* Section headings and product catalogue/filter/detail presentation. */
 h2{font-size:30px;margin:58px 0 18px;letter-spacing:-1px}section>h2{display:flex;align-items:center;gap:12px}section>h2:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc)}
 .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
 .shop-tools{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:10px;margin:18px 0}.shop-tools input,.shop-tools select{min-height:42px}
@@ -32,6 +46,7 @@ h2{font-size:30px;margin:58px 0 18px;letter-spacing:-1px}section>h2{display:flex
 .product-detail{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;margin-top:28px;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
 .product-preview{display:grid;place-items:center;min-height:260px;background:var(--ink);border-radius:var(--radius-md);font-size:120px}.product-detail h3{font-size:28px;letter-spacing:-1px;margin:0 0 8px}.product-detail p{color:var(--mut)}.detail-price{font-size:24px;font-weight:800;margin:16px 0}.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.detail-meta span{background:var(--accent-soft);color:var(--acc-dark);padding:6px 10px;border-radius:99px;font-size:12px;font-weight:700}
 .quality{width:100%;max-width:400px;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:13px}.quality-head{display:flex;justify-content:space-between;gap:12px;font-weight:700}.quality-status{color:var(--mut)}.quality-status.excellent{color:var(--success)}.quality-status.warning{color:#a56a00}.quality-status.low{color:var(--acc-dark)}.quality p{margin:5px 0 0;color:var(--mut);font-size:12px}.quality ul{margin:7px 0 0;padding-left:18px;color:var(--mut);font-size:12px}
+/* Product choices, Design Studio tools, canvas, print-area guide, and controls. */
 .cat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:22px;text-align:center;cursor:pointer;font-weight:600;transition:transform .2s,box-shadow .2s,border-color .2s}.cat:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cfd5ce}
 .cat span{display:block;font-size:30px}.cat.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
 .studio{display:grid;grid-template-columns:230px 1fr 260px;gap:16px}
@@ -55,32 +70,40 @@ select,input[type=number],input[type=text]{width:100%;padding:9px;border-radius:
 .tmpl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .tmpl button{padding:8px 2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;font-size:12px}
 .flow{display:flex;flex-wrap:wrap;gap:8px;font-size:13px}.flow span{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+/* Cart drawer, cart rows, validation messages, and checkout notes. */
 #drawer{position:fixed;right:0;top:0;bottom:0;width:min(380px,100%);background:var(--card);border-left:1px solid var(--line);padding:calc(20px + env(safe-area-inset-top,0px)) 20px 20px;transform:translateX(105%);transition:.25s;z-index:9;overflow:auto}
 #drawer.open{transform:none}
 .item{border-bottom:1px solid var(--line);padding:10px 0;font-size:14px;display:flex;gap:10px}.item img{width:60px;height:60px;object-fit:contain;background:var(--bg);border-radius:8px}.item-actions{display:flex;align-items:center;gap:5px;margin-top:5px}.item-actions button{width:24px;height:24px;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}.field-error{color:var(--acc-dark);font-size:12px;margin:4px 0 0}.checkout-note{padding:10px 12px;background:var(--accent-soft);border-radius:10px;color:var(--mut);font-size:12px}
 footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
 .mobile-menu{display:none}
+/* Collapse columns and reveal the mobile navigation at smaller viewport widths. */
 @media(max-width:900px){header{padding:14px 18px}.wrap{padding:0 18px}.hero,.studio{grid-template-columns:1fr}.hero{padding:56px 0 42px}.hero-visual{min-height:280px}.mobile-menu{display:block;margin-left:8px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink)}nav{display:none}nav.open{display:flex;position:absolute;left:18px;right:18px;top:70px;flex-direction:column;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}nav.open a{padding:10px 12px}}
 @media(max-width:700px){.shop-tools,.product-detail{grid-template-columns:1fr}.product-preview{min-height:190px}}
 @media(max-width:520px){.hero h1{letter-spacing:-2px}.hero-actions .btn{width:100%;text-align:center}.proof{gap:16px}.hero-product{font-size:110px}}
 </style></head><body>
+<!-- Accessibility shortcut and global navigation for the three main page sections. -->
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header><a class="logo" href="#" aria-label="HPS Custom Print home"><span class="logo-mark">HPS</span><span>HPS<b>.</b> Custom Print</span></a><nav id="main-nav"><a href="#shop">Shop</a><a href="#studio">Design Studio</a><a href="#how">How it works</a></nav>
 <div><button class="mobile-menu" type="button" aria-controls="main-nav" aria-expanded="false" onclick="toggleNav()">Menu</button><button class="btn alt" onclick="toggleCart()" aria-label="Open cart">🛒 Cart (<span id="cc">0</span>)</button></div></header>
 
 <main id="main-content" class="wrap">
+<!-- Marketing introduction: primary design action and product discovery shortcut. -->
 <section class="hero"><div><p class="eyebrow">Custom printing, made personal</p><h1>Wear your <em>own design.</em></h1><p>Pick a product, upload your logo or artwork, add text, and see it on the garment live. Thoughtfully printed and delivered across Bangladesh.</p><div class="hero-actions"><button class="btn" onclick="location.hash='studio'">Start designing</button><button class="btn alt" onclick="location.hash='shop'">Explore products</button></div></div>
 <div class="hero-visual" aria-label="Custom printed T-shirt preview"><div class="hero-product">👕</div><div class="hero-note">Made for your story · ৳350+</div></div></section>
 <div class="proof" aria-label="HPS service highlights"><div><strong>01</strong>Choose your product</div><div><strong>02</strong>Design it your way</div><div><strong>03</strong>We print & deliver</div></div>
+<!-- Sign-in and registration controls; authenticated account details are rendered here. -->
 <section class="account-panel" id="account"><h2>Customer account</h2><div id="account-content"><p class="account-message">Sign in to view your orders and keep your HPS activity connected.</p><div class="account-grid"><div><label for="account-email">Email</label><input id="account-email" type="email" autocomplete="email"><label for="account-password">Password</label><input id="account-password" type="password" minlength="8" autocomplete="current-password"><div class="account-actions"><button class="btn" onclick="login()">Sign in</button><button class="btn alt" onclick="register()">Create account</button></div></div><div id="account-message" class="account-message"></div></div></div></section>
 
+<!-- Search/filter controls and dynamically generated product cards. -->
 <section id="shop"><h2>1. Choose a product</h2>
 <div class="seg" id="gender"></div>
 <div class="shop-tools" aria-label="Product search and filters"><input id="product-search" type="search" placeholder="Search products..." aria-label="Search products"><select id="category-filter" aria-label="Filter by category"><option value="all">All categories</option><option value="apparel">Apparel</option><option value="accessories">Accessories</option></select><select id="price-filter" aria-label="Filter by price"><option value="all">Any price</option><option value="under500">Under ৳500</option><option value="500to1000">৳500–৳1,000</option><option value="over1000">Over ৳1,000</option></select></div>
 <div class="shop-summary"><span id="product-count"></span><strong>Choose a product to customize</strong></div>
 <div class="cats" id="cats"></div></section>
+<!-- Product description and customize action are filled by renderProductDetail(). -->
 <section id="product-detail" class="product-detail" aria-live="polite"></section>
 
+<!-- Design Studio: editing tools, front/back canvas, print quality, and pricing. -->
 <section id="studio"><h2>2. Design it</h2>
 <div class="studio">
  <div class="panel"><h3>Tools</h3>
@@ -113,11 +136,13 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
  </div>
 </div></section>
 
+<!-- Informational order lifecycle; this is explanatory UI, not a live workflow tracker. -->
 <section id="how"><h2>3. How your order is made</h2>
 <div class="flow"><span>Order</span><span>Payment verified</span><span>Design review</span><span>Printing</span><span>Quality check</span><span>Packaging</span><span>Delivery</span></div></section>
 <footer>HPS Custom Print &amp; Design · Quality custom printing for Bangladesh.<br><span>Cash on Delivery, bKash &amp; Nagad are ready for backend integration.</span></footer>
 </main>
 
+<!-- Off-canvas cart and checkout form. Cart rows, quote totals, and messages are dynamic. -->
 <aside id="drawer"><h3 style="margin-top:0">Your order <button class="btn alt" style="float:right;padding:4px 10px" onclick="toggleCart()">✕</button></h3>
 <div id="items"><p style="color:var(--mut)">Cart is empty.</p></div>
 <div class="row"><span>Delivery</span><span id="dl">৳0</span></div>
@@ -127,7 +152,10 @@ footer{margin:70px 0 30px;padding-top:24px;border-top:1px solid var(--line);colo
 <label>Payment</label><select id="pay"><option>Cash on Delivery</option><option>bKash</option><option>Nagad</option><option>Card</option></select>
 <p><button class="btn" style="width:100%" onclick="place()">Place order</button></p><div id="msg"></div></aside>
 
+<!-- Browser-side application logic. The server remains authoritative for quote/order prices. -->
 <script>
+// Product data used to render the prototype catalogue and calculate the on-screen estimate.
+// Final prices are re-checked by the server; this object is not the production database.
 const PRODUCTS={
  "T-Shirt":{i:"👕",p:350,category:"apparel",description:"A comfortable everyday tee made for bold artwork and easy styling.",colors:["Black","White","Red","Blue","Green","Yellow"]},
  "Hoodie":{i:"🧥",p:750,category:"apparel",description:"A soft heavyweight hoodie with room for expressive front or back designs.",colors:["Black","White","Red","Blue"]},
@@ -135,19 +163,28 @@ const PRODUCTS={
  "Bag":{i:"👜",p:300,category:"accessories",description:"A reusable everyday bag that turns your artwork into a practical essential.",colors:["Black","White","Red"]},
  "Cap":{i:"🧢",p:250,category:"accessories",description:"A classic cap with a compact print area for logos and small designs.",colors:["Black","White","Red","Blue"]}
 };
+// Display colors for the garment preview, and size-specific surcharges in the prototype.
 const COLORS={Black:"#111111",White:"#f5f5f5",Red:"#c62828",Blue:"#1565c0",Green:"#2e7d32",Yellow:"#f9a825"};
 const SIZES={S:0,M:0,L:0,XL:0,XXL:50,"3XL":80};
+// Preset text/emoji choices shown in the Design Studio template grid.
 const TEMPLATES=["🎮 Gaming","💻 Cyber","❤️ Love","🎂 Birthday","⚽ Sports","🇧🇩 Bangladesh","🎓 Graduation","🎵 Music","😂 Funny"];
 const EMOJI=["🎮","💻","❤️","🎂","⚽","🇧🇩","🎓","🎵","😂"];
+// Shared UI state: selected product/options, both canvas sides, cart, and product detail selection.
 const S={g:"Men",p:"T-Shirt",c:"Black",side:"front",qty:1};const saved={front:null,back:null};const cart=[];let selectedProduct="T-Shirt";
+// Short helper for looking up page elements by their HTML id.
 const $=id=>document.getElementById(id);
+// Toggle the mobile navigation menu and keep its accessibility state in sync.
 function toggleNav(){const nav=$("main-nav"),button=document.querySelector(".mobile-menu"),open=nav.classList.toggle("open");button.setAttribute("aria-expanded",open)}
+// Create the Fabric.js canvas, which handles selecting, moving, resizing, and rotating artwork.
 const cv=new fabric.Canvas("c",{preserveObjectStacking:true});
+// Format a number using Bangladeshi taka and grouped thousands.
 const fmt=n=>"৳"+n.toLocaleString("en-IN");
 
+// Draw the garment outline for the selected color and front/back neckline.
 function shirtPath(){const neck=S.side=="front"?"Q200,64 240,30":"Q200,44 240,30";
  $("shirt").setAttribute("d","M120,40 L160,30 "+neck+" L280,40 L370,110 L335,165 L295,140 L295,420 L105,420 L105,140 L65,165 L30,110 Z");
  $("shirt").setAttribute("fill",COLORS[S.c]);}
+// Rebuild the product filters/cards, color choices, product heading, preview, and price.
 function build(){
  $("gender").innerHTML=["Men","Women","Unisex"].map(g=>`<button class="${g==S.g?"on":""}" onclick="S.g='${g}';build()">${g}</button>`).join("");
  const query=$("product-search").value.trim().toLowerCase(),category=$("category-filter").value,priceFilter=$("price-filter").value;
@@ -156,71 +193,113 @@ function build(){
  $("cats").innerHTML=products.length?products.map(k=>`<div class="cat ${k==S.p?"on":""}" tabindex="0" role="button" onclick="selectProduct('${k}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProduct('${k}')"><span>${PRODUCTS[k].i}</span>${k}<div style="font-weight:400;font-size:13px;color:var(--mut)">from ${fmt(PRODUCTS[k].p)}</div></div>`).join(""):'<p style="color:var(--mut)">No products match your filters.</p>';
  $("colors").innerHTML=PRODUCTS[S.p].colors.map(k=>`<i title="${k}" class="${k==S.c?"on":""}" style="background:${COLORS[k]}" onclick="S.c='${k}';build()"></i>`).join("");
  $("pname").textContent=S.g+" · "+S.p;renderProductDetail();shirtPath();price();}
+// Update the selected product, choose an available color, and bring its detail panel into view.
 function selectProduct(k){S.p=k;selectedProduct=k;if(!PRODUCTS[k].colors.includes(S.c))S.c=PRODUCTS[k].colors[0];build();$("product-detail").scrollIntoView({behavior:"smooth",block:"start"})}
+// Render the selected product's description and button that jumps into the editor.
 function renderProductDetail(){const p=PRODUCTS[selectedProduct];$("product-detail").innerHTML=`<div class="product-preview" aria-label="${selectedProduct} preview">${p.i}</div><div><p class="eyebrow">Product details</p><h3>${selectedProduct}</h3><p>${p.description}</p><div class="detail-price">From ${fmt(p.p)}</div><div class="detail-meta"><span>${p.category=="apparel"?"Apparel":"Accessory"}</span><span>Front and back print areas</span><span>Made to order</span></div><button class="btn" onclick="S.p='${selectedProduct}';build();location.hash='studio'">Customize this product</button></div>`}
+// Fill the size dropdown and template buttons once the page controls exist.
 $("size").innerHTML=Object.keys(SIZES).map(s=>`<option value="${s}">${s}${SIZES[s]?" (+৳"+SIZES[s]+")":""}</option>`).join("");
 $("size").value="L";
 $("tmpl").innerHTML=TEMPLATES.map((t,i)=>`<button onclick="tpl(${i})">${t}</button>`).join("");
 ["product-search","category-filter","price-filter"].forEach(id=>$(id).oninput=build);
 
+// Return only the user's artwork objects; the garment and dashed overlay are separate HTML/SVG.
 function userObjs(){return cv.getObjects()}
+// Compare artwork bounds with the printable and safer inner regions, then show guidance.
 function quality(){const objects=userObjs(),print={left:136,top:120,right:264,bottom:322},safe={left:148,top:132,right:252,bottom:310};if(!objects.length){$("quality").innerHTML='<div class="quality-head"><span>Print quality</span><span class="quality-status">Not started</span></div><p>Add artwork to see print-quality feedback.</p>';return}
  let outside=false,unsafe=false;objects.forEach(o=>{const r=o.getBoundingRect(true,true);const right=r.left+r.width,bottom=r.top+r.height;if(r.left<print.left||r.top<print.top||right>print.right||bottom>print.bottom)outside=true;if(r.left<safe.left||r.top<safe.top||right>safe.right||bottom>safe.bottom)unsafe=true});
  const status=outside?"Low":unsafe?"Good":"Excellent",className=outside?"low":unsafe?"warning":"excellent";let message=outside?"Move artwork inside the dashed print area before ordering.":unsafe?"Artwork is printable, but close to the safe-area boundary.":"Artwork fits the recommended safe area.";const tips=outside?'<ul><li>Keep important text and logos away from the edge.</li><li>Resize or reposition the selected artwork.</li></ul>':`<p>${message}</p>`;$("quality").innerHTML=`<div class="quality-head"><span>Print quality</span><span class="quality-status ${className}">${status}</span></div>${tips}`}
+// Report whether there is artwork on either side, including the side not currently visible.
 function printedSides(){const cur=userObjs().length>0,f=S.side=="front"?cur:!!(saved.front&&JSON.parse(saved.front).objects.length),b=S.side=="back"?cur:!!(saved.back&&JSON.parse(saved.back).objects.length);return{f,b}}
+// Calculate an estimated unit price from the selected base product and print options.
 function calc(){const b=PRODUCTS[S.p].p,{f,b:bk}=printedSides(),sz=SIZES[$("size").value],ex=$("exp").checked?100:0;
  const lines=[["Base "+S.p,b],["Front print",f?100:0],["Back print",bk?100:0],["Size "+$("size").value,sz],["Express",ex]].filter(l=>l[1]);
  return{lines,unit:lines.reduce((a,l)=>a+l[1],0)}}
+// Refresh the visible price breakdown and quality message after an editor option changes.
 function price(){const c=calc();$("break").innerHTML=c.lines.map(l=>`<div class="row"><span>${l[0]}</span><span>${fmt(l[1])}</span></div>`).join("")+`<div class="row"><span>× ${S.qty}</span><span></span></div>`;$("total").textContent=fmt(c.unit*S.qty);quality();}
+// Change the requested quantity while ensuring it never drops below one.
 function q(d){S.qty=Math.max(1,S.qty+d);$("qv").textContent=S.qty;price()}
+// Recalculate when size/express selections or Fabric.js artwork changes.
 ["size","exp"].forEach(i=>$(i).onchange=price);
 cv.on("object:added",price);cv.on("object:removed",price);
 cv.on("object:modified",price);
 
+// Place a new object at the center of the editor canvas and refresh its selection bounds.
 function fit(o){o.set({originX:"center",originY:"center",left:200,top:230});o.setCoords()}
+// Keep local saved artwork separate for every product and print side.
 function designKey(){return `hps-design-${S.p}-${S.side}`}
+// Save the current canvas locally first, then optionally sync a new account version.
 async function saveDesign(){saved[S.side]=JSON.stringify(cv.toJSON());localStorage.setItem(designKey(),saved[S.side]);const editorState={front:saved.front?JSON.parse(saved.front):null,back:saved.back?JSON.parse(saved.back):null};const designKeyForProduct=`hps-design-id-${S.p}`;const qualityStatus=($("quality").querySelector(".quality-status")?.textContent||"Not started").toLowerCase().replace(/\s+/g,"_");const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent="Design saved on this device."; $("quality").append(note);try{const account=await accountRequest("/api/auth/me","GET");if(!account.user){note.textContent+=" Sign in to back it up to your account.";return}const payload={productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:`${S.g} ${S.p} design`,editorState,qualityStatus};let designId=localStorage.getItem(designKeyForProduct);let result;if(designId){try{result=await accountRequest(`/api/designs/${designId}/versions`,"POST",payload)}catch(error){if(!error.message.includes("Design not found"))throw error;localStorage.removeItem(designKeyForProduct)}}if(!result){result=await accountRequest("/api/designs","POST",payload);designId=result.design.id;localStorage.setItem(designKeyForProduct,designId)}note.textContent=`Design saved on this device and to your account (version ${result.design.currentVersion}).`}catch(error){note.style.color="var(--acc-dark)";note.textContent=`Saved on this device, but account backup failed: ${error.message}`}}
+// Load local artwork immediately; if signed in, fetch the latest account version as well.
 async function loadDesign(){const localData=localStorage.getItem(designKey());if(localData){saved[S.side]=localData;cv.loadFromJSON(localData,()=>{cv.renderAll();price()})}else{$("quality").insertAdjacentHTML("beforeend",'<p style="color:var(--acc-dark);font-weight:700">No saved design for this product side on this device.</p>')}try{const account=await accountRequest("/api/auth/me","GET");if(!account.user)return;const designKeyForProduct=`hps-design-id-${S.p}`;let designId=localStorage.getItem(designKeyForProduct);if(!designId){const listing=await accountRequest("/api/designs","GET");designId=listing.designs.find(design=>design.productId===S.p.toLowerCase().replace(/\s+/g,"-"))?.id;if(!designId)return;localStorage.setItem(designKeyForProduct,designId)}const result=await accountRequest(`/api/designs/${designId}`,"GET");saved.front=result.design.editorState.front?JSON.stringify(result.design.editorState.front):null;saved.back=result.design.editorState.back?JSON.stringify(result.design.editorState.back):null;["front","back"].forEach(side=>{const data=saved[side];if(data)localStorage.setItem(`hps-design-${S.p}-${side}`,data);else localStorage.removeItem(`hps-design-${S.p}-${side}`)});cv.clear();shirtPath();if(saved[S.side])cv.loadFromJSON(saved[S.side],()=>{cv.renderAll();price()});else price();const note=document.createElement("p");note.style.color="var(--success)";note.style.fontWeight="700";note.textContent=`Version ${result.design.currentVersion} loaded from your account.`;$("quality").append(note)}catch(error){const note=document.createElement("p");note.style.color="var(--acc-dark)";note.textContent=`Could not load account backup: ${error.message}`;$("quality").append(note)}}
+// Validate and read an uploaded image as a browser data URL for Fabric.js.
 $("file").onchange=e=>{const f=e.target.files[0];if(!f)return;
  if(!/^image\/(png|jpeg|svg\+xml)$/.test(f.type)||f.size>10*1048576){alert("Use PNG, JPG or SVG under 10 MB.");return}
  const r=new FileReader();r.onload=()=>fabric.Image.fromURL(r.result,img=>{img.scaleToWidth(120);fit(img);cv.add(img).setActiveObject(img)});r.readAsDataURL(f);e.target.value=""};
+// Create editable text in the currently selected text color.
 function addText(){const t=prompt("Your text:","Your Text");if(!t)return;const o=new fabric.IText(t,{fontSize:28,fontWeight:"bold",fill:$("tc").value,fontFamily:"Arial Black, Arial"});fit(o);cv.add(o).setActiveObject(o)}
+// Insert one of the preset emoji artwork choices.
 function tpl(i){const o=new fabric.Text(EMOJI[i],{fontSize:90});fit(o);cv.add(o).setActiveObject(o)}
+// Remove selected objects from the canvas.
 function del(){cv.getActiveObjects().forEach(o=>cv.remove(o));cv.discardActiveObject().renderAll()}
+// Duplicate the selected object and offset the copy so it can be seen immediately.
 function dup(){const a=cv.getActiveObject();if(!a)return;a.clone(c=>{c.set({left:a.left+20,top:a.top+20});cv.add(c).setActiveObject(c)})}
+// Apply color to selected non-image artwork; uploaded image pixels are not recolored here.
 $("tc").oninput=e=>{const a=cv.getActiveObject();if(a&&a.type!="image"){a.set("fill",e.target.value);cv.renderAll()}};
+// Apply the selected opacity percentage to the current canvas object.
 $("op").oninput=e=>{const a=cv.getActiveObject();if(a){a.set("opacity",e.target.value/100);cv.renderAll()}};
+// Allow Delete to remove artwork, but do not intercept Delete while text is being edited.
 document.addEventListener("keydown",e=>{if(e.key=="Delete"&&!(cv.getActiveObject()&&cv.getActiveObject().isEditing))del()});
 
+// Preserve the outgoing side, switch the visible shirt, and restore that side's artwork.
 $("sides").onclick=e=>{const s=e.target.dataset.s;if(!s||s==S.side)return;
  saved[S.side]=JSON.stringify(cv.toJSON());S.side=s;
  [...$("sides").children].forEach(b=>b.classList.toggle("on",b.dataset.s==s));
  cv.clear();shirtPath();const data=saved[s]||localStorage.getItem(designKey());if(data){saved[s]=data;cv.loadFromJSON(data,()=>{cv.renderAll();price()})}else price()};
 
+// Rasterize a small visual cart thumbnail from the garment color and current canvas artwork.
 function preview(){const w=document.createElement("canvas");w.width=200;w.height=230;const x=w.getContext("2d");
  x.fillStyle=COLORS[S.c];x.fillRect(50,15,100,200);x.drawImage(cv.getElement(),0,0,200,230);return w.toDataURL()}
+// Save the current cart array in this browser so it survives a page refresh.
 function persistCart(){localStorage.setItem("hps-cart",JSON.stringify(cart))}
+// Add the current product configuration and artwork thumbnail to the browser cart.
 function addCart(){const c=calc();const p=printedSides();
  if(!p.f&&!p.b&&!confirm("No design added yet. Add plain product to cart?"))return;
  cart.push({productId:S.p.toLowerCase().replace(/\s+/g,"-"),name:S.g+" "+S.p,color:S.c,size:$("size").value,qty:S.qty,unit:c.unit,printSides:[...(p.f?["front"]:[]),...(p.b?["back"]:[])],express:$("exp").checked,f:p.f,b:p.b,img:preview()});persistCart();renderCart();toggleCart(true)}
+// Render cart line items and provisional totals, then ask the API to verify the price.
 function renderCart(){$("cc").textContent=cart.reduce((a,c)=>a+c.qty,0);
  $("items").innerHTML=cart.length?cart.map((c,i)=>`<div class="item"><img src="${c.img}"><div style="flex:1"><b>${c.name}</b><br>${c.color} · ${c.size}<div class="item-actions"><button aria-label="Decrease ${c.name} quantity" onclick="changeCartQty(${i},-1)">−</button><b>×${c.qty}</b><button aria-label="Increase ${c.name} quantity" onclick="changeCartQty(${i},1)">+</button><a href="#" onclick="removeCartItem(${i});return false" style="font-size:12px;color:var(--acc);margin-left:6px">remove</a></div></div><div>${fmt(c.unit*c.qty)}</div></div>`).join(""):'<p style="color:var(--mut)">Cart is empty.</p>';
  const sub=cart.reduce((a,c)=>a+c.unit*c.qty,0),d=cart.length?100:0;$("dl").textContent=fmt(d);$("gt").textContent=fmt(sub+d);verifyCartQuote()}
+// Send cart choices to the server; display only its validated total as the verified amount.
 async function verifyCartQuote(){if(!cart.length){$("quote-status").textContent="Server total will be verified when the API is available.";return}$("quote-status").textContent="Verifying total with HPS server…";try{const response=await fetch("http://127.0.0.1:3000/api/cart/quote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({items:cart.map(item=>({productId:item.productId,quantity:item.qty,size:item.size,color:item.color,printSides:item.printSides,express:item.express}))})});const result=await response.json();if(!response.ok)throw new Error(result.error||"The server rejected this cart.");$("gt").textContent=fmt(result.total);$("dl").textContent=fmt(result.deliveryFee);$("quote-status").textContent="✓ Total verified by HPS server.";$("quote-status").style.color="var(--success)"}catch(error){$("quote-status").textContent=`Unable to verify total: ${error.message}`;$("quote-status").style.color="var(--acc-dark)"}}
+// Shared JSON helper for account APIs; include cookies and turn API errors into readable exceptions.
 async function accountRequest(path,method,body){const response=await fetch(`http://127.0.0.1:3000${path}`,{method,credentials:"include",headers:body?{"content-type":"application/json"}:undefined,body:body?JSON.stringify(body):undefined});const result=response.status===204?{}:await response.json();if(!response.ok)throw new Error(result.error||"Account request failed.");return result}
+// Sign in using the account form and refresh account/order/address details.
 async function login(){const message=$("account-message");message.textContent="Signing in…";try{await accountRequest("/api/auth/login","POST",{email:$("account-email").value,password:$("account-password").value});await loadAccount();message.textContent="Signed in successfully."}catch(error){message.textContent=error.message}}
+// Register the email/password pair; the customer must sign in after registration.
 async function register(){const message=$("account-message");message.textContent="Creating account…";try{await accountRequest("/api/auth/register","POST",{email:$("account-email").value,password:$("account-password").value});message.textContent="Account created. Sign in to view orders."}catch(error){message.textContent=error.message}}
+// Clear the current session cookie on the server and update the account view.
 async function logout(){await accountRequest("/api/auth/logout","POST");loadAccount()}
+// Copy a saved address's recipient and delivery text into checkout fields.
 function selectSavedAddress(id){const address=savedAddresses.find(item=>item.id===id);if(!address)return;$("nm").value=address.recipientName;$("ph").value=address.phone;$("ad").value=address.addressLine}
+// Cached address list used to map the selected dropdown value back to its data.
 let savedAddresses=[];
+// Fetch saved addresses for the signed-in customer and populate the checkout dropdown.
 async function refreshSavedAddresses(){const select=$("saved-address");select.replaceChildren(new Option("Enter a new address",""));try{const result=await accountRequest("/api/addresses","GET");savedAddresses=result.addresses;result.addresses.forEach(address=>select.add(new Option(`${address.label} — ${address.recipientName}, ${address.addressLine}`,address.id)))}catch(error){savedAddresses=[];if(!error.message.includes("Sign in"))throw error}}
+// Check the active session, render order history, and load the customer's address book.
 async function loadAccount(){try{const result=await accountRequest("/api/auth/me","GET");if(!result.user){savedAddresses=[];$("saved-address").replaceChildren(new Option("Sign in to use saved addresses",""));return}const orders=await accountRequest("/api/orders","GET");$("account-content").innerHTML=`<p class="account-message">Signed in as <strong>${result.user.email}</strong></p><div class="account-actions"><button class="btn alt" onclick="logout()">Sign out</button></div><h3>Your orders</h3>${orders.orders.length?orders.orders.map(order=>`<div class="order-card"><strong>${order.id}</strong> · ৳${order.total.toLocaleString("en-IN")}<br><span>${order.status} · ${order.paymentMethod} · ${new Date(order.createdAt).toLocaleDateString()}</span></div>`).join(""):'<p class="account-message">No orders yet.</p>'}`;await refreshSavedAddresses()}catch(error){$("account-message").textContent=error.message}}
+// Update one cart line's quantity, then persist and re-render all totals.
 function changeCartQty(i,d){cart[i].qty=Math.max(1,cart[i].qty+d);persistCart();renderCart()}
+// Remove one cart line, then persist and re-render.
 function removeCartItem(i){cart.splice(i,1);persistCart();renderCart()}
+// Open the cart drawer, close it, or toggle it when no explicit state is supplied.
 function toggleCart(o){$("drawer").classList.toggle("open",o===true?true:undefined)}
+// Validate checkout, optionally save/update an account address, then submit the order to the API.
 async function place(){if(!cart.length)return;const phone=$("ph").value.trim().replace(/[\s-]/g,""),validPhone=/^(?:\+8801|01)\d{9}$/.test(phone);$("phone-error").textContent=validPhone?"":"Enter a valid Bangladesh mobile number."; $("address-error").textContent=$("ad").value.trim()?"":"Enter your delivery address.";if(!$("nm").value.trim()||!validPhone||!$("ad").value.trim()){$("msg").textContent="Please complete the highlighted checkout fields.";return}
  $("msg").textContent="Submitting your order securely…";try{if($("save-address").checked){const account=await accountRequest("/api/auth/me","GET");if(!account.user)throw new Error("Sign in before saving an address to your account.");const selectedId=$("saved-address").value;const existing=savedAddresses.find(address=>address.id===selectedId);const address={label:existing?.label||"Delivery address",recipientName:$("nm").value.trim(),phone,addressLine:$("ad").value.trim()};if(selectedId)await accountRequest(`/api/addresses/${selectedId}`,"PUT",address);else{const saved=await accountRequest("/api/addresses","POST",address);$("saved-address").value=saved.address.id}await refreshSavedAddresses();if(selectedId)$("saved-address").value=selectedId}const response=await fetch("http://127.0.0.1:3000/api/orders",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({customer:{name:$("nm").value,phone,address:$("ad").value},paymentMethod:$("pay").value,items:cart.map(item=>({productId:item.productId,quantity:item.qty,size:item.size,color:item.color,printSides:item.printSides,express:item.express}))})});const result=await response.json();if(!response.ok)throw new Error(result.error||"Order could not be created.");$("msg").innerHTML=`<b>Order ${result.order.id} received!</b><br>Status: Pending. Payment: ${result.order.paymentMethod}.<br>Total: ${fmt(result.order.total)}`;cart.length=0;persistCart();renderCart()}catch(error){$("msg").textContent=`Unable to place order: ${error.message}`}}
+// Restore the previously saved cart; discard malformed local data rather than breaking startup.
 const storedCart=localStorage.getItem("hps-cart");if(storedCart){try{const parsed=JSON.parse(storedCart);if(Array.isArray(parsed))cart.push(...parsed)}catch(e){localStorage.removeItem("hps-cart")}}
+// Initial page render and session refresh after all required markup and functions are available.
 build();renderCart();
 loadAccount();
 </script></body></html>
