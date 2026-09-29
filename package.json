@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "db:migrate": "node server/migrate.js"
+    "db:migrate": "node server/migrate.js",
+    "db:seed": "node server/seed.js"
   },
   "engines": {
     "node": ">=20"
