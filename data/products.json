@@ -24,7 +24,7 @@
     "category": "apparel",
     "sizes": ["S", "M", "L", "XL", "XXL"],
     "colors": ["Black", "Blue"],
-    "printSides": ["front"]
+    "printSides": ["front", "back"]
   },
   {
     "id": "bag",
@@ -33,7 +33,7 @@
     "category": "accessories",
     "sizes": ["One size"],
     "colors": ["Black", "White", "Red"],
-    "printSides": ["front"]
+    "printSides": ["front", "back"]
   },
   {
     "id": "cap",
@@ -42,6 +42,6 @@
     "category": "accessories",
     "sizes": ["One size"],
     "colors": ["Black", "White", "Red", "Blue"],
-    "printSides": ["front"]
+    "printSides": ["front", "back"]
   }
 ]
