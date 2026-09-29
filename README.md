@@ -18,12 +18,42 @@ Phase 1 has established the first brand and design-system layer:
 - Product detail panel connected to the Design Studio
 - Live print-quality status with safe-area warnings
 - Front/back artwork state with device-local save/load preparation
+- Cart persistence across refresh with item quantity controls
+- Checkout validation for Bangladesh mobile numbers and required address fields
+- Initial Node.js API foundation with product and server-side cart quote endpoints
+- Browser cart connected to the server quote endpoint with authoritative-total status
+- Checkout orders persisted by the API with backend-generated order IDs
+- PostgreSQL migration schema covering commerce, designs, payments, production and delivery
+- Environment-based PostgreSQL client and migration command
 
 The implementation reference is [HPS_Custom_Print_Design_Final_Project_Implementation_Plan.pdf](./HPS_Custom_Print_Design_Final_Project_Implementation_Plan.pdf).
 
 ## Run locally
 
 Open `index.html` in a modern browser. The current prototype loads Fabric.js from the CDN, so an internet connection is required for the design editor.
+
+To run the initial API foundation:
+
+```bash
+npm start
+```
+
+The API exposes `GET /api/health`, `GET /api/products`, and `POST /api/cart/quote`. Product prices, variant validation, print surcharges, express fees and delivery fees are calculated by the server.
+
+Orders are currently persisted in `data/orders.json` as a temporary development store. This is an intentional transition layer; production deployment should replace it with PostgreSQL or MySQL before launch.
+
+Authentication endpoints are available at `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, and `GET /api/auth/me`. Passwords are hashed with Node's `scrypt`, and login creates an HttpOnly session cookie. User records are currently stored in `data/users.json` for development only.
+
+`GET /api/orders` requires an authenticated session and returns only orders belonging to that customer. The storefront includes the initial account panel for sign-in, registration and order-history display.
+
+## PostgreSQL setup
+
+1. Copy `.env.example` to `.env` and set `DATABASE_URL`.
+2. Install dependencies with `npm install`.
+3. Run `npm run db:migrate`.
+4. Start the API with `npm start`.
+
+Without `DATABASE_URL`, the API explicitly reports `json-development` storage and continues using the temporary JSON transition layer. Do not commit `.env` or database credentials.
 
 ## Planned build sequence
 
