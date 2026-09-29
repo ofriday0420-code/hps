@@ -28,6 +28,8 @@ Phase 1 has established the first brand and design-system layer:
 
 The implementation reference is [HPS_Custom_Print_Design_Final_Project_Implementation_Plan.pdf](./HPS_Custom_Print_Design_Final_Project_Implementation_Plan.pdf).
 
+The latest repository-wide progress, readiness and next-build assessment is [HPS_Custom_Print_Design_Project_Status_and_Next_Build_Report_3.pdf](./HPS_Custom_Print_Design_Project_Status_and_Next_Build_Report_3.pdf).
+
 ## Run locally
 
 Open `index.html` in a modern browser. The current prototype loads Fabric.js from the CDN, so an internet connection is required for the design editor.
