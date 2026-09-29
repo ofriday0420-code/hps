@@ -1,14 +1,33 @@
 import { createServer } from "node:http";
-import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { readFile, writeFile, rename } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { checkDatabase } from "./db.js";
+import { checkDatabase, databaseConfigured } from "./db.js";
+import {
+  createOrder as createPostgresOrder,
+  createDesignForUser as createPostgresDesign,
+  createDesignVersionForUser as createPostgresDesignVersion,
+  createSession as createPostgresSession,
+  createUser as createPostgresUser,
+  createAddressForUser as createPostgresAddress,
+  deleteAddressForUser as deletePostgresAddress,
+  deleteSession as deletePostgresSession,
+  findUserByEmail,
+  findUserBySession,
+  getDesignForUser as getPostgresDesign,
+  listAddressesForUser as listPostgresAddresses,
+  listDesignsForUser as listPostgresDesigns,
+  listOrdersForUser,
+  updateAddressForUser as updatePostgresAddress
+} from "./repositories.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const products = JSON.parse(await readFile(path.join(root, "data", "products.json"), "utf8"));
 const ordersPath = path.join(root, "data", "orders.json");
 const usersPath = path.join(root, "data", "users.json");
+const designsPath = path.join(root, "data", "designs.json");
+const addressesPath = path.join(root, "data", "addresses.json");
 const sessions = new Map();
 const productById = new Map(products.map((product) => [product.id, product]));
 const sizeSurcharges = { XXL: 50, "3XL": 80 };
@@ -65,6 +84,7 @@ function requestCookies(request) {
 async function currentUser(request) {
   const token = requestCookies(request).hps_session;
   if (!token) return null;
+  if (databaseConfigured()) return findUserBySession(token);
   const session = sessions.get(token);
   if (!session || session.expiresAt < Date.now()) {
     sessions.delete(token);
@@ -76,7 +96,16 @@ async function currentUser(request) {
 
 async function readJson(request) {
   const chunks = [];
-  for await (const chunk of request) chunks.push(chunk);
+  let length = 0;
+  for await (const chunk of request) {
+    length += chunk.length;
+    if (length > 16 * 1024 * 1024) {
+      const error = new Error("Request body exceeds the 16 MB limit.");
+      error.statusCode = 413;
+      throw error;
+    }
+    chunks.push(chunk);
+  }
   if (!chunks.length) return {};
   try {
     return JSON.parse(Buffer.concat(chunks).toString("utf8"));
@@ -128,7 +157,57 @@ function quoteCart(items) {
   return { items: normalized, subtotal, deliveryFee, total: subtotal + deliveryFee };
 }
 
-const server = createServer(async (request, response) => {
+function validateDesign(body) {
+  const productId = typeof body?.productId === "string" ? body.productId : "";
+  const name = typeof body?.name === "string" ? body.name.trim() : "";
+  const editorState = body?.editorState;
+  const qualityStatus = body?.qualityStatus ?? "not_started";
+  if (!productById.has(productId)) return { error: "Choose a valid product for this design." };
+  if (!name || name.length > 120) return { error: "Design name must be between 1 and 120 characters." };
+  if (!editorState || typeof editorState !== "object" || Array.isArray(editorState)) {
+    return { error: "Design editorState must be a JSON object." };
+  }
+  if (Buffer.byteLength(JSON.stringify(editorState), "utf8") > 10 * 1024 * 1024) {
+    return { error: "Design editorState exceeds the 10 MB limit." };
+  }
+  if (!["not_started", "excellent", "good", "low"].includes(qualityStatus)) {
+    return { error: "Quality status must be not_started, excellent, good, or low." };
+  }
+  return { value: { productId, name, editorState, qualityStatus } };
+}
+
+async function readLocalDesigns() {
+  return readCollection(designsPath);
+}
+
+function validateAddress(body) {
+  const recipientName = typeof body?.recipientName === "string" ? body.recipientName.trim() : "";
+  const phone = typeof body?.phone === "string" ? body.phone.replace(/[\s-]/g, "") : "";
+  const addressLine = typeof body?.addressLine === "string" ? body.addressLine.trim() : "";
+  const label = typeof body?.label === "string" ? body.label.trim() : "Delivery address";
+  const optional = (value) => typeof value === "string" ? value.trim() : "";
+  if (!recipientName || recipientName.length > 120) return { error: "Recipient name must be between 1 and 120 characters." };
+  if (!/^(?:\+8801|01)\d{9}$/.test(phone)) return { error: "Enter a valid Bangladesh mobile number." };
+  if (!addressLine || addressLine.length > 500) return { error: "Address must be between 1 and 500 characters." };
+  if (!label || label.length > 60) return { error: "Address label must be between 1 and 60 characters." };
+  for (const value of [body?.division, body?.district, body?.area]) {
+    if (value !== undefined && typeof value !== "string") return { error: "Address location fields must be text." };
+    if (typeof value === "string" && value.trim().length > 120) return { error: "Address location fields must be 120 characters or fewer." };
+  }
+  return {
+    value: {
+      label,
+      recipientName,
+      phone,
+      division: optional(body.division) || null,
+      district: optional(body.district) || null,
+      area: optional(body.area) || null,
+      addressLine
+    }
+  };
+}
+
+async function handleRequest(request, response) {
   const url = new URL(request.url, "http://localhost");
   if (request.method === "OPTIONS") {
     response.writeHead(204, { "access-control-allow-origin": "null", "access-control-allow-credentials": "true", "access-control-allow-methods": "GET,POST,OPTIONS", "access-control-allow-headers": "content-type" });
@@ -143,14 +222,25 @@ const server = createServer(async (request, response) => {
       sendJson(response, 400, { error: "Use a valid email and a password of at least 8 characters." });
       return;
     }
-    const users = await readCollection(usersPath);
-    if (users.some((user) => user.email === email)) {
-      sendJson(response, 409, { error: "An account with this email already exists." });
-      return;
+    let user;
+    if (databaseConfigured()) {
+      try {
+        user = await createPostgresUser(email, hashPassword(password));
+      } catch (error) {
+        if (error.code !== "23505") throw error;
+        sendJson(response, 409, { error: "An account with this email already exists." });
+        return;
+      }
+    } else {
+      const users = await readCollection(usersPath);
+      if (users.some((candidate) => candidate.email === email)) {
+        sendJson(response, 409, { error: "An account with this email already exists." });
+        return;
+      }
+      user = { id: `USR-${randomBytes(8).toString("hex")}`, email, passwordHash: hashPassword(password), createdAt: new Date().toISOString() };
+      users.push(user);
+      await saveCollection(usersPath, users);
     }
-    const user = { id: `USR-${randomBytes(8).toString("hex")}`, email, passwordHash: hashPassword(password), createdAt: new Date().toISOString() };
-    users.push(user);
-    await saveCollection(usersPath, users);
     sendJson(response, 201, { user: { id: user.id, email: user.email } });
     return;
   }
@@ -158,21 +248,28 @@ const server = createServer(async (request, response) => {
     const body = await readJson(request);
     const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
     const password = typeof body?.password === "string" ? body.password : "";
-    const users = await readCollection(usersPath);
-    const user = users.find((candidate) => candidate.email === email);
+    const users = databaseConfigured() ? null : await readCollection(usersPath);
+    const user = databaseConfigured()
+      ? await findUserByEmail(email)
+      : users.find((candidate) => candidate.email === email);
     if (!user || !verifyPassword(password, user.passwordHash)) {
       sendJson(response, 401, { error: "Invalid email or password." });
       return;
     }
     const token = randomBytes(32).toString("hex");
-    sessions.set(token, { userId: user.id, expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 7 });
+    const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7;
+    if (databaseConfigured()) await createPostgresSession(token, user.id, expiresAt);
+    else sessions.set(token, { userId: user.id, expiresAt });
     response.writeHead(200, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", "set-cookie": `hps_session=${token}; HttpOnly; SameSite=Lax; Max-Age=604800`, "access-control-allow-origin": "null", "access-control-allow-credentials": "true" });
     response.end(JSON.stringify({ user: { id: user.id, email: user.email } }));
     return;
   }
   if (request.method === "POST" && url.pathname === "/api/auth/logout") {
     const token = requestCookies(request).hps_session;
-    if (token) sessions.delete(token);
+    if (token) {
+      if (databaseConfigured()) await deletePostgresSession(token);
+      else sessions.delete(token);
+    }
     response.writeHead(204, { "set-cookie": "hps_session=; HttpOnly; SameSite=Lax; Max-Age=0", "access-control-allow-origin": "null", "access-control-allow-credentials": "true" });
     response.end();
     return;
@@ -182,10 +279,233 @@ const server = createServer(async (request, response) => {
     sendJson(response, 200, { user: user ? { id: user.id, email: user.email } : null });
     return;
   }
+  if (url.pathname === "/api/addresses" && ["GET", "POST"].includes(request.method)) {
+    const user = await currentUser(request);
+    if (!user) {
+      sendJson(response, 401, { error: "Sign in to access saved addresses." });
+      return;
+    }
+    if (request.method === "GET") {
+      const addresses = databaseConfigured()
+        ? await listPostgresAddresses(user.id)
+        : (await readCollection(addressesPath))
+          .filter((address) => address.userId === user.id)
+          .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+      sendJson(response, 200, { addresses });
+      return;
+    }
+    const body = await readJson(request);
+    if (body === null) {
+      sendJson(response, 400, { error: "Request body must be valid JSON." });
+      return;
+    }
+    const validated = validateAddress(body);
+    if (validated.error) {
+      sendJson(response, 400, { error: validated.error });
+      return;
+    }
+    const address = databaseConfigured()
+      ? await createPostgresAddress(user.id, validated.value)
+      : { id: randomUUID(), userId: user.id, ...validated.value, createdAt: new Date().toISOString() };
+    if (!databaseConfigured()) {
+      const addresses = await readCollection(addressesPath);
+      addresses.push(address);
+      await saveCollection(addressesPath, addresses);
+    }
+    sendJson(response, 201, { address });
+    return;
+  }
+  const addressMatch = url.pathname.match(/^\/api\/addresses\/([0-9a-f-]+)$/i);
+  if (addressMatch && ["PUT", "DELETE"].includes(request.method)) {
+    const user = await currentUser(request);
+    if (!user) {
+      sendJson(response, 401, { error: "Sign in to manage saved addresses." });
+      return;
+    }
+    const addressId = addressMatch[1];
+    if (request.method === "DELETE") {
+      const deleted = databaseConfigured()
+        ? await deletePostgresAddress(user.id, addressId)
+        : await (async () => {
+            const addresses = await readCollection(addressesPath);
+            const remaining = addresses.filter((address) => !(address.id === addressId && address.userId === user.id));
+            if (remaining.length === addresses.length) return false;
+            await saveCollection(addressesPath, remaining);
+            return true;
+          })();
+      sendJson(response, deleted ? 204 : 404, deleted ? undefined : { error: "Address not found." });
+      return;
+    }
+    const body = await readJson(request);
+    if (body === null) {
+      sendJson(response, 400, { error: "Request body must be valid JSON." });
+      return;
+    }
+    const validated = validateAddress(body);
+    if (validated.error) {
+      sendJson(response, 400, { error: validated.error });
+      return;
+    }
+    if (databaseConfigured()) {
+      const address = await updatePostgresAddress(user.id, addressId, validated.value);
+      if (!address) {
+        sendJson(response, 404, { error: "Address not found." });
+        return;
+      }
+      sendJson(response, 200, { address });
+      return;
+    }
+    const addresses = await readCollection(addressesPath);
+    const index = addresses.findIndex((address) => address.id === addressId && address.userId === user.id);
+    if (index < 0) {
+      sendJson(response, 404, { error: "Address not found." });
+      return;
+    }
+    addresses[index] = { ...addresses[index], ...validated.value };
+    await saveCollection(addressesPath, addresses);
+    sendJson(response, 200, { address: addresses[index] });
+    return;
+  }
+  if (url.pathname === "/api/designs" && ["GET", "POST"].includes(request.method)) {
+    const user = await currentUser(request);
+    if (!user) {
+      sendJson(response, 401, { error: "Sign in to access saved designs." });
+      return;
+    }
+    if (request.method === "GET") {
+      const designs = databaseConfigured()
+        ? await listPostgresDesigns(user.id)
+        : (await readLocalDesigns())
+          .filter((design) => design.userId === user.id)
+          .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+      sendJson(response, 200, { designs });
+      return;
+    }
+    const body = await readJson(request);
+    if (body === null) {
+      sendJson(response, 400, { error: "Request body must be valid JSON." });
+      return;
+    }
+    const validated = validateDesign(body);
+    if (validated.error) {
+      sendJson(response, 400, { error: validated.error });
+      return;
+    }
+    const design = databaseConfigured()
+      ? await createPostgresDesign(user.id, validated.value)
+      : (() => {
+          const now = new Date().toISOString();
+          return {
+            id: randomUUID(),
+            userId: user.id,
+            ...validated.value,
+            currentVersion: 1,
+            versions: [{ version: 1, editorState: validated.value.editorState, qualityStatus: validated.value.qualityStatus, createdAt: now }],
+            createdAt: now,
+            updatedAt: now
+          };
+        })();
+    if (!databaseConfigured()) {
+      const designs = await readLocalDesigns();
+      designs.push(design);
+      await saveCollection(designsPath, designs);
+    }
+    sendJson(response, 201, { design });
+    return;
+  }
+  const designMatch = url.pathname.match(/^\/api\/designs\/([0-9a-f-]+)$/i);
+  const designVersionMatch = url.pathname.match(/^\/api\/designs\/([0-9a-f-]+)\/versions$/i);
+  if ((designMatch && request.method === "GET") || (designVersionMatch && request.method === "POST")) {
+    const user = await currentUser(request);
+    if (!user) {
+      sendJson(response, 401, { error: "Sign in to access saved designs." });
+      return;
+    }
+    const designId = (designMatch || designVersionMatch)[1];
+    if (databaseConfigured()) {
+      if (designMatch) {
+        const design = await getPostgresDesign(user.id, designId);
+        if (!design) {
+          sendJson(response, 404, { error: "Design not found." });
+          return;
+        }
+        sendJson(response, 200, { design });
+        return;
+      }
+      const body = await readJson(request);
+      if (body === null) {
+        sendJson(response, 400, { error: "Request body must be valid JSON." });
+        return;
+      }
+      const existing = await getPostgresDesign(user.id, designId);
+      if (!existing) {
+        sendJson(response, 404, { error: "Design not found." });
+        return;
+      }
+      const validated = validateDesign({
+        ...body,
+        productId: existing.productId,
+        name: typeof body.name === "string" ? body.name : existing.name
+      });
+      if (validated.error) {
+        sendJson(response, 400, { error: validated.error });
+        return;
+      }
+      const design = await createPostgresDesignVersion(user.id, designId, validated.value);
+      if (!design) {
+        sendJson(response, 404, { error: "Design not found." });
+        return;
+      }
+      sendJson(response, 201, { design });
+      return;
+    }
+    const designs = await readLocalDesigns();
+    const index = designs.findIndex((design) => design.id === designId && design.userId === user.id);
+    if (index < 0) {
+      sendJson(response, 404, { error: "Design not found." });
+      return;
+    }
+    if (designMatch) {
+      sendJson(response, 200, { design: designs[index] });
+      return;
+    }
+    const body = await readJson(request);
+    if (body === null) {
+      sendJson(response, 400, { error: "Request body must be valid JSON." });
+      return;
+    }
+    const validated = validateDesign({
+      ...body,
+      productId: designs[index].productId,
+      name: typeof body.name === "string" ? body.name : designs[index].name
+    });
+    if (validated.error) {
+      sendJson(response, 400, { error: validated.error });
+      return;
+    }
+    const now = new Date().toISOString();
+    const version = designs[index].currentVersion + 1;
+    designs[index] = {
+      ...designs[index],
+      name: typeof body.name === "string" ? body.name.trim() : designs[index].name,
+      currentVersion: version,
+      qualityStatus: validated.value.qualityStatus,
+      editorState: validated.value.editorState,
+      versions: [...designs[index].versions, { version, editorState: validated.value.editorState, qualityStatus: validated.value.qualityStatus, createdAt: now }],
+      updatedAt: now
+    };
+    await saveCollection(designsPath, designs);
+    sendJson(response, 201, { design: designs[index] });
+    return;
+  }
   if (request.method === "GET" && url.pathname === "/api/orders") {
     const user = await currentUser(request);
     if (!user) {
       sendJson(response, 401, { error: "Sign in to view your orders." });
+      return;
+    }
+    if (databaseConfigured()) {
+      sendJson(response, 200, { orders: await listOrdersForUser(user.id) });
       return;
     }
     const orders = await readCollection(ordersPath);
@@ -241,11 +561,23 @@ const server = createServer(async (request, response) => {
       total: quote.total,
       createdAt: new Date().toISOString()
     };
-    await saveOrder(order);
+    if (databaseConfigured()) await createPostgresOrder(order, body.items);
+    else await saveOrder(order);
     sendJson(response, 201, { order: { id: order.id, status: order.status, total: order.total, paymentMethod: order.paymentMethod } });
     return;
   }
   sendJson(response, 404, { error: "Route not found." });
+}
+
+const server = createServer((request, response) => {
+  handleRequest(request, response).catch((error) => {
+    console.error(`[hps-api] Request failed: ${error.message}`);
+    if (response.headersSent) {
+      response.destroy();
+      return;
+    }
+    sendJson(response, error.statusCode || 500, { error: error.statusCode ? error.message : "The server could not complete this request." });
+  });
 });
 
 const port = Number(process.env.PORT || 3000);
